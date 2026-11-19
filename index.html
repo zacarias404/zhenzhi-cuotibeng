@@ -93,11 +93,11 @@ main{max-width:1080px;margin:0 auto;padding:26px 20px 40px}
 .cropStage{position:relative;overflow:hidden;background:#111;flex:1;min-height:180px;display:flex;align-items:center;justify-content:center;touch-action:none}
 .cropStage img{max-width:100%;max-height:62vh;display:block;user-select:none;-webkit-user-drag:none}
 .cropBox{position:absolute;border:2px solid var(--red);box-shadow:0 0 0 9999px rgba(0,0,0,.5);cursor:move;touch-action:none}
-.ch{position:absolute;width:20px;height:20px;border:2px solid var(--red);background:var(--sheet);touch-action:none}
-.ch.tl{left:-11px;top:-11px;cursor:nwse-resize}
-.ch.tr{right:-11px;top:-11px;cursor:nesw-resize}
-.ch.bl{left:-11px;bottom:-11px;cursor:nesw-resize}
-.ch.br{right:-11px;bottom:-11px;cursor:nwse-resize}
+.chandle{position:absolute;width:20px;height:20px;border:2px solid var(--red);background:var(--sheet);touch-action:none}
+.chandle.tl{left:-11px;top:-11px;cursor:nwse-resize}
+.chandle.tr{right:-11px;top:-11px;cursor:nesw-resize}
+.chandle.bl{left:-11px;bottom:-11px;cursor:nesw-resize}
+.chandle.br{right:-11px;bottom:-11px;cursor:nwse-resize}
 .cropBar{padding:12px 16px;border-top:1px solid var(--hair);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .btn.primary.inline{width:auto;margin:0}
 
@@ -217,7 +217,7 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
 @media(min-width:860px){.toast{bottom:28px}}
 
 /* 手机底部导航 */
-.bottom{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--sheet);border-top:1px solid var(--ink);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:var(--sheet);border-top:1px solid var(--ink);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -1px 0 var(--sheet);-webkit-transform:translateZ(0);transform:translateZ(0)}
 .bottom button{flex:1;appearance:none;border:0;background:none;color:var(--mut);font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.03em;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;cursor:pointer;border-top:2px solid transparent;margin-top:-8px}
 .bottom button.active{color:var(--red);border-top-color:var(--red)}
 .bottom svg{width:20px;height:20px}
@@ -310,7 +310,7 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
 <section class="panel" id="p-points">
   <div class="sec-head"><span class="sec-num">04</span><h2>考点查询</h2><span class="sub">按考点聚合你的错题</span></div>
   <div class="card">
-    <div class="note">「错题次数」「年份」来自你录入的错题；「历年真题」是 AI 分析时给出的参考描述，具体年份请以真题为准。</div>
+    <div class="note">错题次数/年份来自你的记录；历年真题是 AI 给的真题例子（如 2022.01），以真题为准。</div>
     <div class="tools">
       <input type="search" id="ptSearch" placeholder="搜索考点或真题年份…">
       <select id="ptSubject"><option value="全部">全部科目</option></select>
@@ -380,7 +380,7 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
 <div class="cropMask" id="cropMask" hidden>
   <div class="cropWrap">
     <div class="cropHead"><b>框选题目</b><small>拖动四角调整，拖动框内移动；只框一道题</small></div>
-    <div class="cropStage" id="cropStage"><img id="cropImg" alt="待裁剪图片"><div class="cropBox" id="cropBox"><span class="ch tl"></span><span class="ch tr"></span><span class="ch bl"></span><span class="ch br"></span></div></div>
+    <div class="cropStage" id="cropStage"><img id="cropImg" alt="待裁剪图片"><div class="cropBox" id="cropBox"><span class="chandle tl"></span><span class="chandle tr"></span><span class="chandle bl"></span><span class="chandle br"></span></div></div>
     <div class="cropBar">
       <button class="btn" id="cropCancel">取消</button>
       <button class="btn" id="cropReset">重置</button>
@@ -479,7 +479,7 @@ function drawCrop(r){
 }
 $('#cropBox').addEventListener('pointerdown',ev=>{
   if(!cropState)return;
-  const h=ev.target.classList.contains('ch')?ev.target.className.split(' ')[1]:'move';
+  const h=ev.target.classList.contains('chandle')?ev.target.className.split(' ')[1]:'move';
   const start={...cropState.rect,sx:ev.clientX,sy:ev.clientY};
   ev.target.setPointerCapture(ev.pointerId);
   const move=e=>{
@@ -571,9 +571,9 @@ function jsonOf(raw){
 function file2b64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
 function mimeOf(f){const n=f.name.toLowerCase();if(n.endsWith('.png'))return'image/png';if(n.endsWith('.gif'))return'image/gif';if(n.endsWith('.webp'))return'image/webp';return'image/jpeg'}
 
-const SYS='这是中国研究生入学考试政治科目的公开练习题，属正规教育考试辅导场景。请仅从教材知识点和考试答题角度，用规范中性学术表述作答。你是资深考研政治辅导老师，严格按要求输出纯 JSON。';
+const SYS='这是中国研究生入学考试政治科目的公开练习题，属正规教育考试辅导场景。请仅从教材知识点和考试答题角度，用规范中性学术表述作答。你是资深考研政治辅导老师，回答该详则详、该简则简：关键辨析和教材原话要讲透，一般错误一句话点破并给翻书定位；不写套话和空泛铺陈，严格按要求输出纯 JSON。';
 function promptContent(my){
-  return `请完成解析。要求：\n1. 准确提取题干和选项。\n2. subject 从 [马原,毛中特,史纲,思修法治,时政] 选一。\n3. exam_history 简述该考点历年考查情况，不确定年份不要编造，写"以真题为准"。\n4. analysis 逐项说明对错理由。${my?'\n5. user_answer_analysis 专门解释为什么选'+my+'会错。':''}\n输出纯 JSON：\n{"subject":"","question_type":"单选题或多选题","question_text":"","options":{"A":"","B":"","C":"","D":""},"correct_answer":"","knowledge_point":"","exam_history":"","analysis":{"A":"","B":""},"user_answer_analysis":""}`;
+  return `请完成解析。详略按题目需要：需要讲清的讲透彻，一般错误直截了当。\n1. 准确提取题干和选项。\n2. subject 从 [马原,毛中特,史纲,思修法治,时政] 选一。\n3. exam_history 用简短格式列出该考点历年真题例子，格式为"2022.01、2021.03"，至少给2个"年份.题号"；只写你确定的真题，不确定就只写"常见考点，年份题号以真题为准"，绝不编造。\n4. analysis 逐项解析：一般错误选项直截了当说清哪里错、为什么错，并注明知识点出处（哪章/哪节或教材位置），方便回去翻书；只有涉及教材原话或必须讲透的难点才展开详细解释。不要无意义堆砌，也不要把该讲清的压成空话。\n5. knowledge_point 只写考点名称，不加解释。${my?'\n6. user_answer_analysis 直接说明为什么选'+my+'会错、错在哪，给出翻书定位（知识点出处）；必须讲透时才展开。':''}\n输出纯 JSON：\n{"subject":"","question_type":"单选题或多选题","question_text":"","options":{"A":"","B":"","C":"","D":""},"correct_answer":"","knowledge_point":"","exam_history":"","analysis":{"A":"","B":""},"user_answer_analysis":""}`;
 }
 
 async function analyze(){
@@ -607,10 +607,18 @@ async function analyze(){
     const q=normQ(o);
     q.id=Date.now();q.created_at=new Date().toLocaleString('zh-CN',{hour12:false});
     q.user_answer=my;q.model=useModel;
-    // 只保存文字与解析，绝不保存图片
-    questions.unshift(q);save();
-    renderResult(q);
-    toast('分析完成，已保存到错题本（仅文字）');
+    // 只保存文字与解析，绝不保存图片；完全相同题目只留一条
+    const k=qKey(q.question_text);
+    const dup=k?questions.find(x=>qKey(x.question_text)===k):null;
+    if(dup){
+      Object.assign(dup,{subject:q.subject,question_type:q.question_type,question_text:q.question_text,options:q.options,correct_answer:q.correct_answer,knowledge_point:q.knowledge_point,exam_history:q.exam_history,analysis:q.analysis,user_answer_analysis:q.user_answer_analysis,user_answer:my,model:q.model});
+      save();renderResult(dup);
+      toast('这道题已存在，已更新解析，未重复录入');
+    }else{
+      questions.unshift(q);save();
+      renderResult(q);
+      toast('分析完成，已保存到错题本（仅文字）');
+    }
     // 用完即弃，释放内存
     imageBytes=null;file=null;$('#preview').hidden=true;$('#drop').hidden=false;$('#file').value='';
   }catch(e){showErr(e.message)}
@@ -636,6 +644,8 @@ function normQ(o){
     user_answer_analysis:String(o.user_answer_analysis||'').trim()
   };
 }
+// 题干归一化，用于识别重复录入（忽略空白与标点差异）
+function qKey(t){return String(t||'').replace(/\s+/g,'').replace(/[，。；、：,.;:?!？！"'“”‘’()（）【】《》<>·—\-_]/g,'').toLowerCase()}
 function showErr(m){$('#err').textContent=m;$('#err').hidden=false}
 $('#go').addEventListener('click',analyze);
 
@@ -651,7 +661,7 @@ function renderResult(q){
   const qt=q.question_text||'';
   h+=qt.length>200?'<div class="qtext fold" id="rq">'+esc(qt)+'</div><button class="more" id="rqMore">展开全文 ▾</button>':'<div class="qtext">'+esc(qt)+'</div>';
   if(q.knowledge_point)h+='<div class="kp"><b>知识点：</b>'+esc(q.knowledge_point)+'</div>';
-  if(q.exam_history)h+='<div class="exam"><b>历年真题考查</b>'+esc(q.exam_history)+'<small>AI 整理，仅供参考，具体年份以真题为准</small></div>';
+  if(q.exam_history)h+='<div class="exam"><b>历年真题</b>'+esc(q.exam_history)+'</div>';
   h+='<ul class="opts">';
   Object.keys(q.options||{}).forEach(k=>{
     const ok=ans.indexOf(k)>=0,mw=my.indexOf(k)>=0&&!ok;
