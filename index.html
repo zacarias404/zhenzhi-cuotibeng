@@ -73,7 +73,10 @@ main{max-width:1080px;margin:0 auto;padding:26px 20px 40px}
 .seg button{flex:1;appearance:none;border:0;background:transparent;color:var(--mut);font-family:var(--sans);font-weight:600;font-size:13px;padding:10px;cursor:pointer;transition:.18s;border-right:1px solid var(--hair)}
 .seg button:last-child{border-right:0}
 .seg button.active{background:var(--ink);color:var(--sheet)}
-.drop{display:block;border:1px dashed var(--hair);border-radius:2px;padding:32px 16px;text-align:center;cursor:pointer;background:var(--sheet2);transition:.18s}
+.drop{display:block;position:relative;border:1px dashed var(--hair);border-radius:2px;padding:32px 16px;text-align:center;background:var(--sheet2);transition:.18s}
+.fileBtn{display:inline-block;margin-top:14px;padding:10px 22px;background:var(--ink);color:var(--sheet);font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.05em;border-radius:2px;pointer-events:none}
+.fileInput{position:absolute;inset:0;width:100%;height:100%;opacity:.01;cursor:pointer;z-index:2;font-size:0}
+.drop>:not(.fileInput){pointer-events:none}
 .drop:hover,.drop.over{border-color:var(--red);background:var(--paper)}
 .drop .ico{width:48px;height:48px;margin:0 auto 10px;border:1px solid var(--hair);color:var(--ink);display:grid;place-items:center;font-family:var(--serif);font-size:26px}
 .drop b{font-family:var(--serif);font-size:15px;display:block;letter-spacing:.03em}
@@ -81,6 +84,22 @@ main{max-width:1080px;margin:0 auto;padding:26px 20px 40px}
 .preview{position:relative;text-align:center}
 .preview img{max-width:100%;max-height:280px;border:1px solid var(--hair);display:block;margin:0 auto}
 .rm{position:absolute;top:8px;right:8px;appearance:none;border:1px solid var(--ink);background:var(--sheet);color:var(--ink);padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px}
+/* ===== 裁剪 ===== */
+.cropMask{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center;padding:14px}
+.cropWrap{background:var(--sheet);border:1px solid var(--ink);width:100%;max-width:780px;max-height:96vh;display:flex;flex-direction:column}
+.cropHead{padding:11px 16px;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cropHead b{font-family:var(--serif);font-size:16px}
+.cropHead small{color:var(--mut);font-size:11px}
+.cropStage{position:relative;overflow:hidden;background:#111;flex:1;min-height:180px;display:flex;align-items:center;justify-content:center;touch-action:none}
+.cropStage img{max-width:100%;max-height:62vh;display:block;user-select:none;-webkit-user-drag:none}
+.cropBox{position:absolute;border:2px solid var(--red);box-shadow:0 0 0 9999px rgba(0,0,0,.5);cursor:move;touch-action:none}
+.ch{position:absolute;width:20px;height:20px;border:2px solid var(--red);background:var(--sheet);touch-action:none}
+.ch.tl{left:-11px;top:-11px;cursor:nwse-resize}
+.ch.tr{right:-11px;top:-11px;cursor:nesw-resize}
+.ch.bl{left:-11px;bottom:-11px;cursor:nesw-resize}
+.ch.br{right:-11px;bottom:-11px;cursor:nwse-resize}
+.cropBar{padding:12px 16px;border-top:1px solid var(--hair);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.btn.primary.inline{width:auto;margin:0}
 
 label{display:block;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.06em;margin:15px 0 6px;color:var(--ink2)}
 label .opt{font-weight:400;color:var(--mut);font-size:10px;margin-left:6px;letter-spacing:0}
@@ -245,12 +264,13 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
           <button data-mode="text">粘贴文字</button>
         </div>
         <div id="areaImage">
-          <label class="drop" id="drop" for="file">
+          <div class="drop" id="drop">
             <div class="ico">＋</div>
             <b>把题目照片放进来</b>
-            <small>点击选择，或截图后按 Ctrl/⌘+V 粘贴 · AI 自动识别 · 不保存图片</small>
-            <input type="file" id="file" accept="image/*" hidden>
-          </label>
+            <small>点此区域选择图片，或截图按 Ctrl/⌘+V 粘贴 · AI 自动识别 · 不保存图片</small>
+            <span class="fileBtn">选择图片</span>
+            <input type="file" id="file" accept="image/*" class="fileInput">
+          </div>
           <div class="preview" id="preview" hidden>
             <img id="prevImg" alt="预览">
             <button class="rm" id="rmImg">移除</button>
@@ -357,6 +377,18 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
 
 <div class="toast" id="toast" hidden></div>
 
+<div class="cropMask" id="cropMask" hidden>
+  <div class="cropWrap">
+    <div class="cropHead"><b>框选题目</b><small>拖动四角调整，拖动框内移动；只框一道题</small></div>
+    <div class="cropStage" id="cropStage"><img id="cropImg" alt="待裁剪图片"><div class="cropBox" id="cropBox"><span class="ch tl"></span><span class="ch tr"></span><span class="ch bl"></span><span class="ch br"></span></div></div>
+    <div class="cropBar">
+      <button class="btn" id="cropCancel">取消</button>
+      <button class="btn" id="cropReset">重置</button>
+      <button class="btn primary inline" id="cropDone">用这一块识别</button>
+    </div>
+  </div>
+</div>
+
 <script>
 
 (function(){
@@ -398,19 +430,94 @@ $$('#seg button').forEach(b=>b.addEventListener('click',()=>{
   $('#areaImage').hidden=mode!=='image';
   $('#areaText').hidden=mode==='image';
 }));
-// 上传区用 <label for="file"> 原生触发，避免部分浏览器/WebView 拦截脚本触发的 click
+// 文件输入框是可见的原生按钮，点击由浏览器直接处理，兼容所有国产浏览器
 ['dragenter','dragover'].forEach(e=>$('#drop').addEventListener(e,ev=>{ev.preventDefault();$('#drop').classList.add('over')}));
 ['dragleave','drop'].forEach(e=>$('#drop').addEventListener(e,ev=>{ev.preventDefault();$('#drop').classList.remove('over')}));
 $('#drop').addEventListener('drop',ev=>{const f=ev.dataTransfer.files[0];if(f)setFile(f)});
 $('#file').addEventListener('change',e=>{if(e.target.files[0])setFile(e.target.files[0])});
+let cropState=null;
 function setFile(f){
   if(!f.type.startsWith('image/')){toast('请选择图片');return}
   if(f.size>12*1024*1024){toast('图片不能超过12MB');return}
+  openCrop(f);
+}
+function acceptFile(f){
   file=f;
   const r=new FileReader();
   r.onload=e=>{$('#prevImg').src=e.target.result;$('#preview').hidden=false;$('#drop').hidden=true};
   r.readAsDataURL(f);
 }
+function openCrop(f){
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=$('#cropImg');
+    img.onload=()=>{
+      $('#cropMask').hidden=false;
+      requestAnimationFrame(()=>{
+        const stage=$('#cropStage'),ir=img.getBoundingClientRect(),sr=stage.getBoundingClientRect();
+        cropState={img,ox:ir.left-sr.left,oy:ir.top-sr.top,w:ir.width,h:ir.height};
+        resetCrop();
+      });
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(f);
+}
+function resetCrop(){
+  const s=cropState;if(!s)return;
+  const pad=Math.min(s.w,s.h)*0.06;
+  drawCrop({x:s.ox+pad,y:s.oy+pad,w:s.w-pad*2,h:s.h-pad*2});
+}
+function drawCrop(r){
+  const s=cropState,b=$('#cropBox');
+  r.x=Math.max(s.ox,Math.min(r.x,s.ox+s.w-40));
+  r.y=Math.max(s.oy,Math.min(r.y,s.oy+s.h-40));
+  r.w=Math.max(40,Math.min(r.w,s.ox+s.w-r.x));
+  r.h=Math.max(40,Math.min(r.h,s.oy+s.h-r.y));
+  s.rect=r;
+  b.style.left=r.x+'px';b.style.top=r.y+'px';b.style.width=r.w+'px';b.style.height=r.h+'px';
+}
+$('#cropBox').addEventListener('pointerdown',ev=>{
+  if(!cropState)return;
+  const h=ev.target.classList.contains('ch')?ev.target.className.split(' ')[1]:'move';
+  const start={...cropState.rect,sx:ev.clientX,sy:ev.clientY};
+  ev.target.setPointerCapture(ev.pointerId);
+  const move=e=>{
+    const dx=e.clientX-start.sx,dy=e.clientY-start.sy,r={x:start.x,y:start.y,w:start.w,h:start.h};
+    const s=cropState;
+    if(h==='move'){r.x=start.x+dx;r.y=start.y+dy}
+    else{
+      if(h.indexOf('l')>=0){r.x=start.x+dx;r.w=start.w-dx}
+      if(h.indexOf('r')>=0){r.w=start.w+dx}
+      if(h.indexOf('t')>=0){r.y=start.y+dy;r.h=start.h-dy}
+      if(h.indexOf('b')>=0){r.h=start.h+dy}
+      if(r.w<60){if(h.indexOf('l')>=0)r.x=start.x+start.w-60;r.w=60}
+      if(r.h<60){if(h.indexOf('t')>=0)r.y=start.y+start.h-60;r.h=60}
+    }
+    drawCrop(r);
+  };
+  const up=()=>{ev.target.removeEventListener('pointermove',move);ev.target.removeEventListener('pointerup',up)};
+  ev.target.addEventListener('pointermove',move);
+  ev.target.addEventListener('pointerup',up);
+});
+$('#cropReset').addEventListener('click',resetCrop);
+$('#cropCancel').addEventListener('click',()=>{$('#cropMask').hidden=true;cropState=null;$('#file').value=''});
+$('#cropDone').addEventListener('click',()=>{
+  const s=cropState;if(!s)return;
+  const img=s.img,r=s.rect;
+  const sc=img.naturalWidth/img.clientWidth;
+  const sx=Math.round((r.x-s.ox)*sc),sy=Math.round((r.y-s.oy)*sc);
+  const sw=Math.round(r.w*sc),sh=Math.round(r.h*sc);
+  const cv=document.createElement('canvas');
+  const max=1600,scale=Math.min(1,max/Math.max(sw,sh));
+  cv.width=Math.round(sw*scale);cv.height=Math.round(sh*scale);
+  cv.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,cv.width,cv.height);
+  cv.toBlob(b=>{
+    const f=new File([b],'crop.jpg',{type:'image/jpeg'});
+    $('#cropMask').hidden=true;cropState=null;
+    acceptFile(f);toast('已裁剪，点「开始识别」即可');
+  },'image/jpeg',0.92);
+});
 $('#rmImg').addEventListener('click',()=>{file=null;$('#file').value='';$('#preview').hidden=true;$('#drop').hidden=false});
 // 截图直接粘贴：绕开部分内置浏览器禁用文件选择器的问题
 document.addEventListener('paste',ev=>{
@@ -419,7 +526,7 @@ document.addEventListener('paste',ev=>{
   for(const it of items){
     if(it.type&&it.type.indexOf('image')===0){
       const f=it.getAsFile();
-      if(f){ev.preventDefault();nav('analyze');setFile(f);toast('已粘贴截图，点「开始识别」即可');return}
+      if(f){ev.preventDefault();nav('analyze');setFile(f);return}
     }
   }
 });
