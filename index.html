@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>考研政治错题本</title>
+<link rel="icon" href="data:,">
+<style>
+
+:root{
+  --paper:#F2EFE7;--sheet:#FAF8F2;--sheet2:#F6F3EA;
+  --ink:#1A1A1A;--ink2:#3A3833;--mut:#77736A;--hair:#CFC9B8;--hair2:#E2DDCE;
+  --red:#C7322E;--olive:#5E6347;
+  --ok:#E7EBDD;--err:#F4DFDC;--p:#1A1A1A;
+  --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);color:var(--ink);background:var(--paper);
+  line-height:1.7;-webkit-font-smoothing:antialiased;
+  padding-bottom:calc(74px + env(safe-area-inset-bottom));font-size:15px;
+}
+@media(min-width:860px){body{padding-bottom:30px}}
+
+/* ===== 报头 masthead ===== */
+.mast{border-top:0;background:var(--sheet);border-bottom:1px solid var(--ink)}
+.mast-in{max-width:1080px;margin:0 auto;padding:14px 20px 16px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.mast-top{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--hair);padding-bottom:7px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase}
+.mast-top .issue{color:var(--red);font-weight:700}
+.brand{display:flex;align-items:center;gap:14px}
+.seal{width:50px;height:50px;flex:none;border:2px solid var(--red);color:var(--red);display:grid;place-items:center;font-family:var(--serif);font-size:26px;font-weight:700;line-height:1;transform:rotate(-3deg)}
+.brand h1{font-family:var(--serif);font-size:clamp(24px,5vw,34px);font-weight:700;letter-spacing:.04em;line-height:1.15}
+.brand .en{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--mut);margin-top:4px;text-transform:uppercase}
+.mast-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.status{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:5px 10px;border:1px solid var(--hair);color:var(--mut);background:var(--sheet2)}
+.status.ok{border-color:var(--olive);color:var(--olive)}
+.status.err{border-color:var(--red);color:var(--red)}
+.mast-right .tag{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--mut)}
+@media(max-width:560px){.mast-right .tag{display:none}.seal{width:42px;height:42px;font-size:22px}}
+
+/* ===== 栏目导航 ===== */
+.tabs{max-width:1080px;margin:0 auto;padding:0 20px;display:flex;border-bottom:1px solid var(--hair);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;appearance:none;border:0;background:none;font-family:var(--sans);color:var(--mut);font-size:13px;font-weight:600;letter-spacing:.05em;padding:13px 16px 11px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.2s}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--red);border-bottom-color:var(--red)}
+
+main{max-width:1080px;margin:0 auto;padding:26px 20px 40px}
+.panel{display:none}
+.panel.active{display:block}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+
+/* ===== 栏目 / 卡片 ===== */
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;padding-bottom:9px;border-bottom:1px solid var(--hair)}
+.sec-num{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:700;letter-spacing:.05em}
+.sec-head h2{font-family:var(--serif);font-size:21px;font-weight:700;letter-spacing:.03em}
+.sec-head .sub{margin-left:auto;font-size:11px;color:var(--mut);letter-spacing:.03em}
+
+.card{background:var(--sheet);border:1px solid var(--hair);border-radius:3px;padding:20px;margin-bottom:20px}
+.card:last-child{margin-bottom:0}
+.ch{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--hair2)}
+.ch h2{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:.03em}
+.ch .sub{font-family:var(--mono);font-size:10px;color:var(--mut);letter-spacing:.05em}
+
+/* ===== 表单 ===== */
+.seg{display:flex;border:1px solid var(--hair);border-radius:2px;margin-bottom:16px}
+.seg button{flex:1;appearance:none;border:0;background:transparent;color:var(--mut);font-family:var(--sans);font-weight:600;font-size:13px;padding:10px;cursor:pointer;transition:.18s;border-right:1px solid var(--hair)}
+.seg button:last-child{border-right:0}
+.seg button.active{background:var(--ink);color:var(--sheet)}
+.drop{display:block;border:1px dashed var(--hair);border-radius:2px;padding:32px 16px;text-align:center;cursor:pointer;background:var(--sheet2);transition:.18s}
+.drop:hover,.drop.over{border-color:var(--red);background:var(--paper)}
+.drop .ico{width:48px;height:48px;margin:0 auto 10px;border:1px solid var(--hair);color:var(--ink);display:grid;place-items:center;font-family:var(--serif);font-size:26px}
+.drop b{font-family:var(--serif);font-size:15px;display:block;letter-spacing:.03em}
+.drop small{color:var(--mut);font-size:11px;display:block;margin-top:5px;letter-spacing:.02em}
+.preview{position:relative;text-align:center}
+.preview img{max-width:100%;max-height:280px;border:1px solid var(--hair);display:block;margin:0 auto}
+.rm{position:absolute;top:8px;right:8px;appearance:none;border:1px solid var(--ink);background:var(--sheet);color:var(--ink);padding:4px 10px;font-size:11px;cursor:pointer;border-radius:2px}
+
+label{display:block;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.06em;margin:15px 0 6px;color:var(--ink2)}
+label .opt{font-weight:400;color:var(--mut);font-size:10px;margin-left:6px;letter-spacing:0}
+input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--hair);border-radius:2px;background:var(--sheet);color:var(--ink);font-family:var(--sans);font-size:14px;outline:none;transition:.15s}
+input:focus,textarea:focus,select:focus{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+textarea{resize:vertical;min-height:108px;line-height:1.7}
+.hint{font-size:11px;color:var(--mut);margin-top:5px;letter-spacing:.02em}
+.pwd-row{position:relative}
+.pwd-row input{padding-right:60px}
+.pwd-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);appearance:none;border:0;background:none;color:var(--red);font-size:11px;cursor:pointer;font-weight:700}
+
+.btn{appearance:none;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:10px 16px;border-radius:2px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn:hover{background:var(--ink);color:var(--sheet)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--sheet);width:100%;padding:13px;font-size:14px;margin-top:18px;letter-spacing:.12em}
+.btn.primary:hover{background:var(--red);border-color:var(--red)}
+.btn.sm{padding:6px 11px;font-size:11px}
+.btn.danger{border-color:var(--red);color:var(--red)}
+.btn.danger:hover{background:var(--red);color:var(--sheet)}
+.btn-row{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.progress{display:flex;align-items:center;gap:11px;margin-top:14px;padding:11px 13px;border:1px solid var(--hair);background:var(--sheet2);font-size:12px;color:var(--ink2);letter-spacing:.03em}
+.spin{width:14px;height:14px;border:2px solid var(--hair);border-top-color:var(--red);border-radius:50%;animation:sp .8s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+.alert{margin-top:12px;padding:10px 12px;border:1px solid var(--red);border-left:3px solid var(--red);font-size:12px;color:var(--red);background:var(--sheet)}
+.alert.ok{border-color:var(--olive);border-left-color:var(--olive);color:var(--olive)}
+
+.empty{text-align:center;padding:50px 16px;color:var(--mut)}
+.empty .ei{width:54px;height:54px;margin:0 auto 14px;border:1px solid var(--hair);color:var(--red);display:grid;place-items:center;font-family:var(--serif);font-size:26px}
+.empty b{display:block;color:var(--ink);font-family:var(--serif);font-size:15px;font-weight:700}
+.empty small{font-size:11px}
+
+/* ===== 分析结果 ===== */
+.badge{display:inline-block;padding:2px 9px;border:1px solid var(--hair);border-radius:2px;color:var(--ink2);font-family:var(--mono);font-size:10px;letter-spacing:.06em;background:var(--sheet)}
+.badge.red{border-color:var(--red);color:var(--red)}
+.badge.green{border-color:var(--olive);color:var(--olive)}
+.rh{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.qtext{background:var(--sheet2);border-left:2px solid var(--ink);padding:12px 14px;font-family:var(--serif);font-size:15px;line-height:1.85;white-space:pre-wrap;word-break:break-word}
+.qtext.fold{max-height:118px;overflow:hidden;position:relative;transition:max-height .35s}
+.qtext.fold::after{content:"";position:absolute;inset:auto 0 0;height:32px;background:linear-gradient(transparent,var(--sheet2))}
+.qtext.fold.open{max-height:none}
+.qtext.fold.open::after{display:none}
+.more{appearance:none;border:0;background:none;color:var(--red);font-size:11px;font-weight:700;cursor:pointer;padding:6px 0;font-family:var(--sans);letter-spacing:.05em}
+.kp{margin:12px 0;font-size:12px;color:var(--mut);letter-spacing:.03em}
+.kp b{color:var(--ink);font-family:var(--serif);font-size:14px}
+.exam{margin:12px 0;padding:12px 14px;border:1px solid var(--hair);border-left:3px solid var(--red);background:var(--sheet2);font-size:13px;color:var(--ink2)}
+.exam b{display:block;margin-bottom:4px;color:var(--red);font-family:var(--sans);font-size:11px;letter-spacing:.1em}
+.exam small{display:block;margin-top:6px;color:var(--mut);font-size:10px}
+.opts{list-style:none;margin:13px 0;display:grid;gap:8px}
+.opt{display:flex;gap:11px;align-items:flex-start;padding:10px 12px;border:1px solid var(--hair2);border-radius:2px;font-size:13px;background:var(--sheet)}
+.opt .lt{flex:none;width:23px;height:23px;border:1px solid var(--hair);font-family:var(--mono);font-weight:700;font-size:12px;display:grid;place-items:center;color:var(--mut)}
+.opt.correct{border-color:var(--olive);background:#F2F4EA}
+.opt.correct .lt{background:var(--olive);border-color:var(--olive);color:#fff}
+.opt.mine-wrong{border-color:var(--red);background:#F9EEEC}
+.opt.mine-wrong .lt{background:var(--red);border-color:var(--red);color:#fff}
+.opt .rs{display:block;color:var(--mut);font-size:12px;margin-top:4px;line-height:1.6}
+.Ans,.ans{display:flex;gap:20px;flex-wrap:wrap;padding:12px 14px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);font-size:13px;margin:13px 0;background:var(--sheet2)}
+.ans b{font-family:var(--serif);font-size:15px}
+.wrong-box{margin-top:13px;padding:13px 14px;border:1px solid var(--hair);background:var(--sheet2);font-size:13px;color:var(--ink2);white-space:pre-wrap;line-height:1.75}
+.wrong-box b{display:block;margin-bottom:5px;color:var(--red);font-size:11px;letter-spacing:.1em}
+
+/* ===== 错题本 ===== */
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:15px}
+.tools input[type=search]{flex:1;min-width:150px}
+.tools select{width:auto;min-width:120px}
+.chk{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mut);white-space:nowrap;letter-spacing:.03em}
+.chk input{width:auto}
+.qcard{border:1px solid var(--hair);border-radius:2px;background:var(--sheet);margin-bottom:10px}
+.qhead{padding:12px 14px;display:flex;gap:9px;align-items:center;cursor:pointer}
+.qhead:hover{background:var(--sheet2)}
+.qhead .t{flex:1;font-family:var(--serif);font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qhead .d{font-family:var(--mono);font-size:10px;color:var(--mut);white-space:nowrap}
+.chev{color:var(--red);font-size:11px;transition:.2s}
+.qcard.open .chev{transform:rotate(90deg)}
+.qbody{display:none;padding:0 14px 15px;border-top:1px solid var(--hair2)}
+.qcard.open .qbody{display:block}
+.edit-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:520px){.edit-row{grid-template-columns:1fr}}
+
+/* ===== 考点 ===== */
+.point{border:1px solid var(--hair);border-radius:2px;padding:13px 15px;background:var(--sheet);margin-bottom:10px;border-left:2px solid var(--ink)}
+.ptop{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.ptop .n{font-family:var(--serif);font-size:16px;font-weight:700;flex:1;letter-spacing:.02em}
+.ptop .c{font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.05em}
+.pmeta{margin-top:9px;font-size:11px;color:var(--mut);display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.year{display:inline-block;padding:2px 8px;border:1px solid var(--hair);font-family:var(--mono);font-size:10px;color:var(--ink2)}
+.phist{margin-top:9px;padding-top:9px;border-top:1px dashed var(--hair);font-size:12px;color:var(--ink2);line-height:1.6}
+.note{margin-bottom:15px;padding:11px 13px;background:var(--sheet2);border:1px solid var(--hair2);font-size:11px;color:var(--mut);letter-spacing:.02em;line-height:1.7}
+.note b{color:var(--ink)}
+
+/* ===== 统计 ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:720px){.stats{grid-template-columns:1fr 1fr}}
+.stat{background:var(--sheet);border:1px solid var(--hair);border-radius:2px;padding:16px}
+.stat .n{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--ink);line-height:1.1}
+.stat .l{font-size:11px;color:var(--mut);margin-top:5px;letter-spacing:.05em}
+.bar{display:grid;grid-template-columns:70px 1fr 28px;gap:9px;align-items:center;font-size:11px;margin-bottom:11px}
+.track{height:7px;background:var(--hair2);border-radius:0}
+.fill{height:100%;background:var(--ink)}
+.bnum{text-align:right;color:var(--mut);font-family:var(--mono)}
+.rec{display:flex;gap:8px;align-items:center;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--hair2)}
+.rec .x{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif)}
+.rec .d{font-family:var(--mono);font-size:10px;color:var(--mut)}
+
+/* ===== 说明 ===== */
+.help{font-size:12px;color:var(--ink2);line-height:1.85}
+.help li{margin:0 0 11px 18px}
+.code{background:var(--sheet2);border:1px solid var(--hair);padding:7px 10px;font-family:var(--mono);font-size:11px;color:var(--ink);margin-top:5px}
+a{color:var(--red);text-decoration:none;border-bottom:1px solid var(--red)}
+details{margin-top:15px}
+summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-spacing:.05em}
+
+/* 页脚 */
+.foot{max-width:1080px;margin:30px auto 0;padding:16px 20px;border-top:1px solid var(--hair);display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--mut);text-transform:uppercase}
+
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--sheet);padding:11px 20px;border:1px solid var(--ink);font-size:12px;z-index:99;letter-spacing:.05em;max-width:88%;text-align:center;animation:ink .2s}
+@media(min-width:860px){.toast{bottom:28px}}
+
+/* 手机底部导航 */
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--sheet);border-top:1px solid var(--ink);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.bottom button{flex:1;appearance:none;border:0;background:none;color:var(--mut);font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.03em;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;cursor:pointer;border-top:2px solid transparent;margin-top:-8px}
+.bottom button.active{color:var(--red);border-top-color:var(--red)}
+.bottom svg{width:20px;height:20px}
+@media(min-width:861px){.bottom{display:none}}
+@media(max-width:560px){main{padding:20px 14px 32px}.tabs{padding:0 14px}.mast-in{padding:12px 14px 14px}.card{padding:16px}.foot{padding:14px}}
+
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="mast-top"><span>学习札记 · Study Notes</span><span class="issue">No. 01 / 政治</span></div>
+    <div class="brand">
+      <div class="seal">政</div>
+      <div>
+        <h1>考研政治错题本</h1>
+        <div class="en">Political Theory · Error Notebook</div>
+      </div>
+    </div>
+    <div class="mast-right">
+      <span class="status" id="status">检查配置中…</span>
+      <span class="tag">识 · 辨 · 记 · 习</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="analyze">分析题目</button>
+  <button class="tab" data-tab="book">错题本</button>
+  <button class="tab" data-tab="points">考点查询</button>
+  <button class="tab" data-tab="stats">统计分析</button>
+  <button class="tab" data-tab="settings">设置</button>
+</nav>
+
+<main>
+<section class="panel active" id="p-analyze">
+  <div class="grid">
+    <div>
+      <div class="sec-head"><span class="sec-num">01</span><h2>录入题目</h2></div>
+      <div class="card">
+        <div class="seg" id="seg">
+          <button class="active" data-mode="image">上传图片</button>
+          <button data-mode="text">粘贴文字</button>
+        </div>
+        <div id="areaImage">
+          <label class="drop" id="drop" for="file">
+            <div class="ico">＋</div>
+            <b>把题目照片放进来</b>
+            <small>点击选择，或截图后按 Ctrl/⌘+V 粘贴 · AI 自动识别 · 不保存图片</small>
+            <input type="file" id="file" accept="image/*" hidden>
+          </label>
+          <div class="preview" id="preview" hidden>
+            <img id="prevImg" alt="预览">
+            <button class="rm" id="rmImg">移除</button>
+          </div>
+        </div>
+        <div id="areaText" hidden><textarea id="txt" placeholder="把题干和选项粘贴到这里…"></textarea></div>
+        <label>我选的选项 <span class="opt">选填，填了才分析错因</span></label>
+        <input type="text" id="myAns" placeholder="单选填 B，多选填 ABD" maxlength="10">
+        <button class="btn primary" id="go">开始识别与分析</button>
+        <div class="progress" id="progress" hidden><div class="spin"></div><span id="progTxt">AI 正在识别题目…</span></div>
+        <div class="alert" id="err" hidden></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-head"><span class="sec-num">02</span><h2>分析结果</h2><span class="sub" id="rMeta"></span></div>
+      <div class="card">
+        <div class="empty" id="rEmpty"><div class="ei">◎</div><b>结果会显示在这里</b><small>含科目、答案、逐项解析、真题考点与错因</small></div>
+        <div id="rBox" hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p-book">
+  <div class="sec-head"><span class="sec-num">03</span><h2>我的错题本</h2><span class="sub" id="bookCnt"></span></div>
+  <div class="card">
+    <div class="tools">
+      <input type="search" id="bookSearch" placeholder="搜索题干、考点、备注…">
+      <select id="bookSubject"><option value="全部">全部科目</option></select>
+      <label class="chk"><input type="checkbox" id="onlyWrong"> 仅导出做错的</label>
+      <button class="btn" id="expBtn">导出 Markdown</button>
+    </div>
+    <div id="bookList"></div>
+  </div>
+</section>
+
+<section class="panel" id="p-points">
+  <div class="sec-head"><span class="sec-num">04</span><h2>考点查询</h2><span class="sub">按考点聚合你的错题</span></div>
+  <div class="card">
+    <div class="note">「错题次数」「年份」来自你录入的错题；「历年真题」是 AI 分析时给出的参考描述，具体年份请以真题为准。</div>
+    <div class="tools">
+      <input type="search" id="ptSearch" placeholder="搜索考点或真题年份…">
+      <select id="ptSubject"><option value="全部">全部科目</option></select>
+    </div>
+    <div id="ptList"></div>
+  </div>
+</section>
+
+<section class="panel" id="p-stats">
+  <div class="sec-head"><span class="sec-num">05</span><h2>统计分析</h2></div>
+  <div class="stats" id="statCards"></div>
+  <div class="grid">
+    <div class="card"><div class="ch"><h2>科目分布</h2></div><div id="subjChart"></div></div>
+    <div class="card"><div class="ch"><h2>题型分布</h2></div><div id="typeChart"></div></div>
+    <div class="card"><div class="ch"><h2>录入年份</h2></div><div id="yearChart"></div></div>
+    <div class="card"><div class="ch"><h2>最近录入</h2></div><div id="recent"></div></div>
+  </div>
+</section>
+
+<section class="panel" id="p-settings">
+  <div class="sec-head"><span class="sec-num">06</span><h2>设置</h2></div>
+  <div class="grid">
+    <div class="card">
+      <div class="ch"><h2>DeepSeek 设置</h2></div>
+      <label>API Key <span class="opt">只存本机浏览器</span></label>
+      <div class="pwd-row"><input type="password" id="cfgKey" placeholder="sk-xxxxxxxx"><button class="pwd-toggle" id="eye">显示</button></div>
+      <div class="hint">在 <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">platform.deepseek.com/api_keys</a> 创建，需先充值。</div>
+      <label>模型</label>
+      <select id="cfgModel">
+        <option value="deepseek-flash">Flash · 快速（支持读图，推荐）</option>
+        <option value="deepseek-v4-pro">Pro · 强推理（读图会自动切 Flash）</option>
+      </select>
+      <details><summary>高级 · 接口地址</summary>
+        <div class="hint" style="margin-top:8px">默认 https://api.deepseek.com，一般无需修改。</div>
+        <input type="text" id="cfgBase" placeholder="https://api.deepseek.com" style="margin-top:8px">
+      </details>
+      <div class="btn-row"><button class="btn" id="saveCfg">保存</button><button class="btn" id="testCfg">测试连接</button></div>
+      <div class="alert" id="cfgAlert" hidden></div>
+    </div>
+    <div class="card">
+      <div class="ch"><h2>怎么用</h2></div>
+      <ol class="help">
+        <li>填好 API Key 并保存，点「测试连接」确认可用。</li>
+        <li>上传错题照片，AI 自己识别题目文字并解析，<b>只保存文字，不保存图片</b>，省空间不卡顿。</li>
+        <li>结果自动进错题本；「考点查询」看高频考点与真题年份。</li>
+        <li>导出 Markdown 复习。数据都存在你这台设备的浏览器里。</li>
+      </ol>
+      <div class="note" style="margin-top:16px"><b>模型：</b>读图用 Flash；Pro 推理更强但读图时会自动用 Flash。旧的 deepseek-chat / reasoner 已停用。</div>
+      <div class="note"><b>注意：</b>换设备或清浏览器数据会丢失记录，重要错题记得导出 Markdown 备份。</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot"><span>考研政治错题本 · Study Notes</span><span>本地存储 · 不上传图片</span></footer>
+
+<nav class="bottom" id="bottom">
+  <button class="active" data-tab="analyze"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>分析</button>
+  <button data-tab="book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5a2 2 0 012-2h13v18H6a2 2 0 01-2-2z"/><path d="M8 7h7"/></svg>错题本</button>
+  <button data-tab="points"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 12h6"/></svg>考点</button>
+  <button data-tab="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>统计</button>
+  <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1l2-1.5-2-3.4-2.4 1a7 7 0 00-1.7-1L14.5 3h-4L10 6.1a7 7 0 00-1.7 1l-2.4-1-2 3.4 2 1.5a7 7 0 000 2l-2 1.5 2 3.4 2.4-1a7 7 0 001.7 1l.5 3.1h4l.5-3.1a7 7 0 001.7-1l2.4 1 2-3.4-2-1.5a7 7 0 00.1-1z"/></svg>设置</button>
+</nav>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const SUBJ=['马原','毛中特','史纲','思修法治','时政'];
+const COLOR={'马原':'#e05263','毛中特':'#f08a3c','史纲':'#3b9ae1','思修法治':'#9b6dd6','时政':'#2bb3a3'};
+const QKEY='zzq_questions_v3', CKEY='zzq_config_v3';
+let questions=loadArr(QKEY);
+let cfg=Object.assign({key:'',base:'https://api.deepseek.com',model:'deepseek-flash'},loadObj(CKEY));
+let file=null, mode='image', timer=null;
+
+function loadArr(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}}
+function loadObj(k){try{return JSON.parse(localStorage.getItem(k))||{}}catch(e){return{}}}
+function save(){localStorage.setItem(QKEY,JSON.stringify(questions))}
+function saveCfg(){localStorage.setItem(CKEY,JSON.stringify(cfg))}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(timer);timer=setTimeout(()=>t.hidden=true,2500)}
+function color(s){return COLOR[s]||'#737b9c'}
+function norm(s){return String(s||'').toUpperCase().replace(/[^A-Z]/g,'').split('').sort().join('')}
+
+/* ---------- 导航 ---------- */
+function nav(tab){
+  $$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  $$('#bottom button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  $$('.panel').forEach(p=>p.classList.toggle('active',p.id==='p-'+tab));
+  if(tab==='book')renderBook();
+  if(tab==='points')renderPoints();
+  if(tab==='stats')renderStats();
+  if(tab==='settings')fillCfg();
+  window.scrollTo(0,0);
+}
+$$('.tab, #bottom button').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.tab)));
+
+/* ---------- 输入 ---------- */
+$$('#seg button').forEach(b=>b.addEventListener('click',()=>{
+  $$('#seg button').forEach(x=>x.classList.toggle('active',x===b));
+  mode=b.dataset.mode;
+  $('#areaImage').hidden=mode!=='image';
+  $('#areaText').hidden=mode==='image';
+}));
+// 上传区用 <label for="file"> 原生触发，避免部分浏览器/WebView 拦截脚本触发的 click
+['dragenter','dragover'].forEach(e=>$('#drop').addEventListener(e,ev=>{ev.preventDefault();$('#drop').classList.add('over')}));
+['dragleave','drop'].forEach(e=>$('#drop').addEventListener(e,ev=>{ev.preventDefault();$('#drop').classList.remove('over')}));
+$('#drop').addEventListener('drop',ev=>{const f=ev.dataTransfer.files[0];if(f)setFile(f)});
+$('#file').addEventListener('change',e=>{if(e.target.files[0])setFile(e.target.files[0])});
+function setFile(f){
+  if(!f.type.startsWith('image/')){toast('请选择图片');return}
+  if(f.size>12*1024*1024){toast('图片不能超过12MB');return}
+  file=f;
+  const r=new FileReader();
+  r.onload=e=>{$('#prevImg').src=e.target.result;$('#preview').hidden=false;$('#drop').hidden=true};
+  r.readAsDataURL(f);
+}
+$('#rmImg').addEventListener('click',()=>{file=null;$('#file').value='';$('#preview').hidden=true;$('#drop').hidden=false});
+// 截图直接粘贴：绕开部分内置浏览器禁用文件选择器的问题
+document.addEventListener('paste',ev=>{
+  const items=ev.clipboardData&&ev.clipboardData.items;
+  if(!items)return;
+  for(const it of items){
+    if(it.type&&it.type.indexOf('image')===0){
+      const f=it.getAsFile();
+      if(f){ev.preventDefault();nav('analyze');setFile(f);toast('已粘贴截图，点「开始识别」即可');return}
+    }
+  }
+});
+
+/* ---------- API ---------- */
+function base(){return (cfg.base||'https://api.deepseek.com').replace(/\/$/,'')}
+function status(ok,msg){
+  const el=$('#status');el.className='status '+(ok?'ok':'err');
+  el.textContent=ok?'已连接':'未配置 Key';el.title=msg||'';
+}
+function initStatus(){status(!!cfg.key,cfg.key?'':'请到设置页填 API Key')}
+
+async function call(messages,json){
+  if(!cfg.key)throw new Error('还没有填写 API Key，请到「设置」页填写。');
+  const body={model:cfg.model,messages,stream:false,temperature:0.2,max_tokens:4096};
+  if(json)body.response_format={type:'json_object'};
+  let res;
+  try{
+    res=await fetch(base()+'/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
+      body:JSON.stringify(body)
+    });
+  }catch(e){throw new Error('网络连不上 DeepSeek，检查网络后再试。')}
+  if(!res.ok){
+    if(res.status===401)throw new Error('API Key 无效或过期，请到设置页检查。');
+    if(res.status===402)throw new Error('DeepSeek 余额不足，请到 platform.deepseek.com 充值。');
+    if(res.status===429)throw new Error('请求太频繁，稍等再试。');
+    if(res.status>=500)throw new Error('DeepSeek 服务暂时不可用，稍后重试。');
+    throw new Error('请求失败（HTTP '+res.status+'）');
+  }
+  const d=await res.json();
+  return d.choices[0].message.content;
+}
+function jsonOf(raw){
+  let t=raw.trim();
+  const f=t.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);if(f)t=f[1].trim();
+  const s=t.indexOf('{'),e=t.lastIndexOf('}');
+  if(s<0||e<=s)throw new Error('AI 没返回有效结果，重试或换 Flash 模型。');
+  return JSON.parse(t.slice(s,e+1).replace(/,\s*([}\]])/g,'$1'));
+}
+function file2b64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
+function mimeOf(f){const n=f.name.toLowerCase();if(n.endsWith('.png'))return'image/png';if(n.endsWith('.gif'))return'image/gif';if(n.endsWith('.webp'))return'image/webp';return'image/jpeg'}
+
+const SYS='这是中国研究生入学考试政治科目的公开练习题，属正规教育考试辅导场景。请仅从教材知识点和考试答题角度，用规范中性学术表述作答。你是资深考研政治辅导老师，严格按要求输出纯 JSON。';
+function promptContent(my){
+  return `请完成解析。要求：\n1. 准确提取题干和选项。\n2. subject 从 [马原,毛中特,史纲,思修法治,时政] 选一。\n3. exam_history 简述该考点历年考查情况，不确定年份不要编造，写"以真题为准"。\n4. analysis 逐项说明对错理由。${my?'\n5. user_answer_analysis 专门解释为什么选'+my+'会错。':''}\n输出纯 JSON：\n{"subject":"","question_type":"单选题或多选题","question_text":"","options":{"A":"","B":"","C":"","D":""},"correct_answer":"","knowledge_point":"","exam_history":"","analysis":{"A":"","B":""},"user_answer_analysis":""}`;
+}
+
+async function analyze(){
+  const my=$('#myAns').value.trim().toUpperCase().replace(/[, ]/g,'');
+  let content,imageBytes=null,mime=null;
+  if(mode==='image'){
+    if(!file){showErr('请先上传图片，或切换到粘贴文字。');return}
+    imageBytes=await file2b64(file);mime=mimeOf(file);
+    content=promptContent(my);
+  }else{
+    const t=$('#txt').value.trim();
+    if(!t){showErr('请先粘贴题目文字，或切换到上传图片。');return}
+    content=promptContent(my)+'\n\n题目文字：\n'+t;
+  }
+  const btn=$('#go');btn.disabled=true;btn.textContent='识别中…';
+  $('#err').hidden=true;$('#progress').hidden=false;
+  $('#progTxt').textContent=imageBytes?'AI 正在识别图片文字并解析…':'AI 正在解析题目…';
+  try{
+    let uContent;
+    if(imageBytes){
+      uContent=[{type:'text',text:content},{type:'image_url',image_url:{url:'data:'+mime+';base64,'+imageBytes,detail:'high'}}];
+    }else{uContent=content}
+    // 读图强制用 Flash（Pro 不支持读图）
+    const model=(imageBytes&&cfg.model!=='deepseek-flash')?'deepseek-flash':cfg.model;
+    const useModel=model;
+    const realModel=cfg.model;cfg.model=useModel;
+    let raw;
+    try{raw=await call([{role:'system',content:SYS},{role:'user',content:uContent}],true)}
+    finally{cfg.model=realModel}
+    const o=jsonOf(raw);
+    const q=normQ(o);
+    q.id=Date.now();q.created_at=new Date().toLocaleString('zh-CN',{hour12:false});
+    q.user_answer=my;q.model=useModel;
+    // 只保存文字与解析，绝不保存图片
+    questions.unshift(q);save();
+    renderResult(q);
+    toast('分析完成，已保存到错题本（仅文字）');
+    // 用完即弃，释放内存
+    imageBytes=null;file=null;$('#preview').hidden=true;$('#drop').hidden=false;$('#file').value='';
+  }catch(e){showErr(e.message)}
+  finally{btn.disabled=false;btn.textContent='开始识别与分析';$('#progress').hidden=true}
+}
+function normQ(o){
+  let s=String(o.subject||'').trim();
+  const alias={'马原':'马原','马克思主义基本原理':'马原','毛中特':'毛中特','毛泽东思想':'毛中特','毛选':'毛中特','史纲':'史纲','思修':'思修法治','思想道德与法治':'思修法治','时政':'时政','形势与政策':'时政'};
+  if(SUBJ.indexOf(s)<0)s=Object.keys(alias).some(k=>s.indexOf(k)>=0)?alias[Object.keys(alias).find(k=>s.indexOf(k)>=0)]:'马原';
+  const opts={};const ro=o.options||{};
+  Object.keys(ro).forEach(k=>{const l=String(k).toUpperCase().replace(/[^A-D]/g,'');if(l)opts[l]=String(ro[k]||'').trim()});
+  const an={};const ra=o.analysis||{};
+  Object.keys(ra).forEach(k=>{const l=String(k).toUpperCase().replace(/[^A-D]/g,'');if(l)an[l]=String(ra[k]||'').trim()});
+  return{
+    subject:s,
+    question_type:String(o.question_type||'单选题').indexOf('多')>=0?'多选题':'单选题',
+    question_text:String(o.question_text||'').trim(),
+    options:opts,
+    correct_answer:String(o.correct_answer||'').toUpperCase().replace(/[^A-D]/g,'').split('').sort().join(''),
+    knowledge_point:String(o.knowledge_point||'').trim(),
+    exam_history:String(o.exam_history||'').trim(),
+    analysis:an,
+    user_answer_analysis:String(o.user_answer_analysis||'').trim()
+  };
+}
+function showErr(m){$('#err').textContent=m;$('#err').hidden=false}
+$('#go').addEventListener('click',analyze);
+
+/* ---------- 结果 ---------- */
+function renderResult(q){
+  $('#rEmpty').hidden=true;$('#rBox').hidden=false;
+  $('#rMeta').textContent='#'+String(q.id).slice(-6);
+  const ans=q.correct_answer||'',my=q.user_answer||'';
+  let h='<div class="rh"><span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span>'+
+        '<span class="badge gray">'+esc(q.question_type)+'</span>';
+  if(my)h+='<span class="badge" style="background:'+(norm(my)===norm(ans)?'var(--ok)':'var(--err)')+'">'+(norm(my)===norm(ans)?'选对':'选错')+'</span>';
+  h+='</div>';
+  const qt=q.question_text||'';
+  h+=qt.length>200?'<div class="qtext fold" id="rq">'+esc(qt)+'</div><button class="more" id="rqMore">展开全文 ▾</button>':'<div class="qtext">'+esc(qt)+'</div>';
+  if(q.knowledge_point)h+='<div class="kp"><b>知识点：</b>'+esc(q.knowledge_point)+'</div>';
+  if(q.exam_history)h+='<div class="exam"><b>历年真题考查</b>'+esc(q.exam_history)+'<small>AI 整理，仅供参考，具体年份以真题为准</small></div>';
+  h+='<ul class="opts">';
+  Object.keys(q.options||{}).forEach(k=>{
+    const ok=ans.indexOf(k)>=0,mw=my.indexOf(k)>=0&&!ok;
+    let c='opt'+(ok?' correct':'')+(mw?' mine-wrong':'');
+    const rs=q.analysis&&q.analysis[k]?'<span class="rs">'+esc(q.analysis[k])+'</span>':'';
+    h+='<li class="'+c+'"><span class="lt">'+k+'</span><div>'+esc(q.options[k])+rs+'</div></li>';
+  });
+  h+='</ul><div class="ans"><span>正确答案：<b>'+esc(ans||'—')+'</b></span>'+(my?'<span>你选的：<b>'+esc(my)+'</b></span>':'')+'</div>';
+  if(q.user_answer_analysis)h+='<div class="wrong-box"><b>为什么选它会错</b>'+esc(q.user_answer_analysis)+'</div>';
+  h+='<div class="hint" style="margin-top:12px">由 '+(q.model||'Flash')+' 分析 · 仅保存文字 · AI 可能出错，请结合教材核对</div>';
+  $('#rBox').innerHTML=h;
+  const more=$('#rqMore');
+  if(more)more.addEventListener('click',()=>{
+    const d=$('#rq');const open=d.classList.toggle('open');more.textContent=open?'收起 ▴':'展开全文 ▾';
+  });
+}
+
+/* ---------- 错题本 ---------- */
+function renderBook(){
+  const kw=$('#bookSearch').value.trim().toLowerCase(),sub=$('#bookSubject').value;
+  let list=questions.filter(q=>(sub==='全部'||q.subject===sub)&&
+    (!kw||(q.question_text||'').toLowerCase().indexOf(kw)>=0||(q.knowledge_point||'').toLowerCase().indexOf(kw)>=0||(q.notes||'').toLowerCase().indexOf(kw)>=0));
+  $('#bookCnt').textContent='共 '+list.length+' 题';
+  const box=$('#bookList');
+  if(!list.length){box.innerHTML='<div class="empty"><div class="ei">▤</div><b>还没有错题</b><small>去「分析题目」上传一道试试</small></div>';return}
+  box.innerHTML=list.map(q=>{
+    const right=norm(q.user_answer)&&norm(q.user_answer)===norm(q.correct_answer);
+    let opts='';Object.keys(q.options||{}).forEach(k=>{
+      const ok=(q.correct_answer||'').indexOf(k)>=0,mw=(q.user_answer||'').indexOf(k)>=0&&!ok;
+      opts+='<li class="opt'+(ok?' correct':'')+(mw?' mine-wrong':'')+'"><span class="lt">'+k+'</span><div>'+esc(q.options[k])+'</div></li>';
+    });
+    return '<div class="qcard"><div class="qhead"><span class="chev">▸</span>'+
+      '<span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span>'+
+      (right?'<span class="badge" style="background:var(--ok)">对</span>':(q.user_answer?'<span class="badge" style="background:var(--err)">错</span>':''))+
+      '<span class="t">'+esc((q.question_text||'').slice(0,40))+'</span><span class="d">'+esc((q.created_at||'').slice(5,10))+'</span></div>'+
+      '<div class="qbody"><div class="qtext">'+esc(q.question_text)+'</div><ul class="opts">'+opts+'</ul>'+
+      '<div class="ans"><span>答案：<b>'+esc(q.correct_answer||'—')+'</b></span>'+(q.user_answer?'<span>你选：<b>'+esc(q.user_answer)+'</b></span>':'')+
+      (q.knowledge_point?'<span>考点：<b>'+esc(q.knowledge_point)+'</b></span>':'')+'</div>'+
+      (q.exam_history?'<div class="exam"><b>历年真题</b>'+esc(q.exam_history)+'</div>':'')+
+      (q.user_answer_analysis?'<div class="wrong-box"><b>错因</b>'+esc(q.user_answer_analysis)+'</div>':'')+
+      '<div class="edit-row"><div><label>我选的</label><input class="eAns" value="'+esc(q.user_answer)+'" placeholder="B 或 ABD"></div>'+
+      '<div><label>备注</label><input class="eNote" value="'+esc(q.notes||'')+'" placeholder="复习提醒"></div></div>'+
+      '<div class="btn-row"><button class="btn sm saveB">保存</button><button class="btn sm danger delB">删除</button></div></div></div>';
+  }).join('');
+  const cards=$$('#bookList .qcard');
+  list.forEach((q,i)=>{
+    const c=cards[i];
+    c.querySelector('.qhead').addEventListener('click',()=>c.classList.toggle('open'));
+    c.querySelector('.saveB').addEventListener('click',()=>{
+      q.user_answer=c.querySelector('.eAns').value.trim().toUpperCase().replace(/[, ]/g,'');
+      q.notes=c.querySelector('.eNote').value.trim();save();toast('已保存');renderBook();
+    });
+    c.querySelector('.delB').addEventListener('click',()=>{
+      if(!confirm('确定删除这道错题？'))return;
+      questions=questions.filter(x=>x.id!==q.id);save();toast('已删除');renderBook();
+    });
+  });
+}
+$('#bookSearch').addEventListener('input',debounce(renderBook,300));
+$('#bookSubject').addEventListener('change',renderBook);
+
+function exportMd(){
+  const sub=$('#bookSubject').value,only=$('#onlyWrong').checked;
+  let list=questions.filter(q=>sub==='全部'||q.subject===sub);
+  if(only)list=list.filter(q=>q.user_answer&&norm(q.user_answer)!==norm(q.correct_answer));
+  let md='# 考研政治错题本\n\n> 导出时间：'+new Date().toLocaleString('zh-CN')+' · 共 '+list.length+' 题\n\n';
+  list.forEach((q,i)=>{
+    md+='## '+(i+1)+'. ['+q.subject+'] '+q.question_type+'\n\n'+q.question_text+'\n\n';
+    Object.keys(q.options||{}).forEach(k=>{md+='- **'+k+'.** '+q.options[k]+((q.correct_answer||'').indexOf(k)>=0?' ✅':'')+'\n'});
+    md+='\n**正确答案：** '+(q.correct_answer||'—')+(q.user_answer?'　**我选的：** '+q.user_answer:'')+'\n\n';
+    if(q.knowledge_point)md+='**知识点：** '+q.knowledge_point+'\n\n';
+    if(q.exam_history)md+='**历年真题：** '+q.exam_history+'\n\n';
+    if(q.analysis){md+='**逐项解析：**\n\n';Object.keys(q.analysis).forEach(k=>{md+='- '+k+'：'+q.analysis[k]+'\n'});md+='\n'}
+    if(q.user_answer_analysis)md+='**为什么选错：** '+q.user_answer_analysis+'\n\n';
+    if(q.notes)md+='**备注：** '+q.notes+'\n\n';
+    md+='---\n\n';
+  });
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown;charset=utf-8'}));
+  a.download='考研政治错题本.md';a.click();URL.revokeObjectURL(a.href);
+}
+$('#expBtn').addEventListener('click',exportMd);
+
+/* ---------- 考点 ---------- */
+function renderPoints(){
+  const kw=$('#ptSearch').value.trim().toLowerCase(),sub=$('#ptSubject').value;
+  let list=questions.slice();
+  if(sub!=='全部')list=list.filter(q=>q.subject===sub);
+  const g={};
+  list.forEach(q=>{
+    const p=(q.knowledge_point||'').trim()||'未标注考点';
+    const x=g[p]||(g[p]={p,s:q.subject,c:0,years:{},hist:q.exam_history||''});
+    x.c++;if(q.created_at)x.years[(q.created_at).slice(0,4)]=1;
+    if(!x.hist&&q.exam_history)x.hist=q.exam_history;
+  });
+  let arr=Object.values(g);
+  if(kw)arr=arr.filter(x=>x.p.toLowerCase().indexOf(kw)>=0||(x.hist||'').toLowerCase().indexOf(kw)>=0);
+  arr.sort((a,b)=>b.c-a.c);
+  const box=$('#ptList');
+  if(!arr.length){box.innerHTML='<div class="empty"><div class="ei">◇</div><b>还没有考点数据</b><small>先分析几道错题，考点会自动汇总</small></div>';return}
+  box.innerHTML=arr.map(x=>{
+    const ys=Object.keys(x.years).sort().map(y=>'<span class="year">'+y+'</span>').join('')||'—';
+    return '<div class="point"><div class="ptop"><span class="badge" style="background:'+color(x.s)+'">'+esc(x.s)+'</span>'+
+      '<span class="n">'+esc(x.p)+'</span><span class="c">错 '+x.c+' 次</span></div>'+
+      '<div class="pmeta"><span>录入年份：</span>'+ys+'</div>'+
+      (x.hist?'<div class="phist">'+esc(x.hist)+'</div>':'')+'</div>';
+  }).join('');
+}
+$('#ptSearch').addEventListener('input',debounce(renderPoints,300));
+$('#ptSubject').addEventListener('change',renderPoints);
+
+/* ---------- 统计 ---------- */
+function renderStats(){
+  const by={};SUBJ.forEach(s=>by[s]=0);let wrong=0,marked=0;const years={};
+  questions.forEach(q=>{
+    if(by[q.subject]!==undefined)by[q.subject]++;
+    if(q.user_answer){marked++;if(norm(q.user_answer)!==norm(q.correct_answer))wrong++}
+    if(q.created_at){const y=q.created_at.slice(0,4);years[y]=(years[y]||0)+1}
+  });
+  const top=SUBJ.reduce((a,b)=>by[a]>=by[b]?a:b);
+  $('#statCards').innerHTML=
+    stat(questions.length,'累计错题')+
+    stat(by[top],'最多：'+top)+
+    stat(marked,'已标记选项')+
+    stat(marked?Math.round(wrong/marked*100)+'%':'—','标记题错误率');
+  $('#subjChart').innerHTML=bars(by,COLOR);
+  const type={};questions.forEach(q=>{const t=q.question_type||'单选题';type[t]=(type[t]||0)+1});
+  $('#typeChart').innerHTML=bars(type,{});
+  $('#yearChart').innerHTML=bars(years,{});
+  const rec=questions.slice(0,6);
+  $('#recent').innerHTML=rec.length?rec.map(q=>'<div class="rec"><span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span><span class="x">'+esc((q.question_text||'').slice(0,30))+'</span><span class="d">'+esc((q.created_at||'').slice(5,10))+'</span></div>').join(''):'<div class="hint">暂无记录</div>';
+}
+function stat(n,l){return '<div class="stat"><div class="n">'+esc(n)+'</div><div class="l">'+esc(l)+'</div></div>'}
+function bars(data,c){
+  const es=Object.keys(data||{}).map(k=>[k,data[k]]);
+  if(!es.length)return '<div class="hint">暂无数据</div>';
+  const max=Math.max.apply(null,es.map(e=>e[1]).concat([1]));
+  return es.map(e=>'<div class="bar"><span>'+esc(e[0])+'</span><div class="track"><div class="fill" style="width:'+Math.max(2,e[1]/max*100)+'%;background:'+(c[e[0]]||'var(--p)')+'"></div></div><span class="bnum">'+e[1]+'</span></div>').join('');
+}
+
+/* ---------- 设置 ---------- */
+function fillCfg(){
+  $('#cfgKey').value=cfg.key||'';$('#cfgBase').value=cfg.base||'https://api.deepseek.com';
+  $('#cfgModel').value=cfg.model||'deepseek-flash';
+}
+$('#eye').addEventListener('click',()=>{
+  const i=$('#cfgKey');const show=i.type==='password';i.type=show?'text':'password';$('#eye').textContent=show?'隐藏':'显示';
+});
+function doSave(){
+  cfg.key=$('#cfgKey').value.trim();cfg.base=$('#cfgBase').value.trim()||'https://api.deepseek.com';cfg.model=$('#cfgModel').value;
+  saveCfg();initStatus();
+}
+$('#saveCfg').addEventListener('click',()=>{doSave();cfgAlert('已保存到本机浏览器',true)});
+$('#testCfg').addEventListener('click',async()=>{
+  doSave();const a=$('#cfgAlert');a.hidden=false;a.className='alert';a.textContent='正在连接…';
+  try{
+    const r=await call([{role:'user',content:'只回复两个字：收到'}],false);
+    a.className='alert ok';a.textContent='连接成功！模型回复：'+String(r).trim().slice(0,30);status(true,'已连接');
+  }catch(e){a.textContent='连接失败：'+e.message;status(false,e.message)}
+});
+function cfgAlert(m,ok){const a=$('#cfgAlert');a.hidden=false;a.className='alert'+(ok?' ok':'');a.textContent=m}
+
+function debounce(fn,ms){let t;return function(){clearTimeout(t);t=setTimeout(fn,ms)}}
+
+/* ---------- init ---------- */
+SUBJ.forEach(s=>{
+  ['#bookSubject','#ptSubject'].forEach(sel=>{const o=document.createElement('option');o.value=s;o.textContent=s;$(sel).appendChild(o)});
+});
+initStatus();fillCfg();
+})();
+
+</script>
+</body>
+</html>
