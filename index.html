@@ -310,7 +310,7 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
 <section class="panel" id="p-points">
   <div class="sec-head"><span class="sec-num">04</span><h2>考点查询</h2><span class="sub">按考点聚合你的错题</span></div>
   <div class="card">
-    <div class="note">错题次数/年份来自你的记录；历年真题是 AI 给的真题例子（如 2022.01），以真题为准。</div>
+    <div class="note">历年真题为 AI 给出的年份.题号例子（如 2022.01）；次数与录入年份来自你的记录。</div>
     <div class="tools">
       <input type="search" id="ptSearch" placeholder="搜索考点或真题年份…">
       <select id="ptSubject"><option value="全部">全部科目</option></select>
@@ -573,7 +573,7 @@ function mimeOf(f){const n=f.name.toLowerCase();if(n.endsWith('.png'))return'ima
 
 const SYS='这是中国研究生入学考试政治科目的公开练习题，属正规教育考试辅导场景。请仅从教材知识点和考试答题角度，用规范中性学术表述作答。你是资深考研政治辅导老师，回答该详则详、该简则简：关键辨析和教材原话要讲透，一般错误一句话点破并给翻书定位；不写套话和空泛铺陈，严格按要求输出纯 JSON。';
 function promptContent(my){
-  return `请完成解析。详略按题目需要：需要讲清的讲透彻，一般错误直截了当。\n1. 准确提取题干和选项。\n2. subject 从 [马原,毛中特,史纲,思修法治,时政] 选一。\n3. exam_history 用简短格式列出该考点历年真题例子，格式为"2022.01、2021.03"，至少给2个"年份.题号"；只写你确定的真题，不确定就只写"常见考点，年份题号以真题为准"，绝不编造。\n4. analysis 逐项解析：一般错误选项直截了当说清哪里错、为什么错，并注明知识点出处（哪章/哪节或教材位置），方便回去翻书；只有涉及教材原话或必须讲透的难点才展开详细解释。不要无意义堆砌，也不要把该讲清的压成空话。\n5. knowledge_point 只写考点名称，不加解释。${my?'\n6. user_answer_analysis 直接说明为什么选'+my+'会错、错在哪，给出翻书定位（知识点出处）；必须讲透时才展开。':''}\n输出纯 JSON：\n{"subject":"","question_type":"单选题或多选题","question_text":"","options":{"A":"","B":"","C":"","D":""},"correct_answer":"","knowledge_point":"","exam_history":"","analysis":{"A":"","B":""},"user_answer_analysis":""}`;
+  return `请完成解析。详略按题目需要：需要讲清的讲透彻，一般错误直截了当。\n1. 准确提取题干和选项。\n2. subject 从 [马原,毛中特,史纲,思修法治,时政] 选一。\n3. exam_history 必须给出至少3个该考点历年真题例子，格式为"2022.01、2021.03、2019.02"，用顿号分隔；这是硬性要求，严禁写"常见考点""以真题为准""具体年份以真题为准"之类空话。若无法精确到题号，至少写出考过的年份，如"2022、2021、2019"。\n4. analysis 逐项解析：一般错误选项直截了当说清哪里错、为什么错，并注明知识点出处（哪章/哪节或教材位置），方便回去翻书；只有涉及教材原话或必须讲透的难点才展开详细解释。不要无意义堆砌，也不要把该讲清的压成空话。\n5. knowledge_point 只写考点名称，不加解释。${my?'\n6. user_answer_analysis 直接说明为什么选'+my+'会错、错在哪，给出翻书定位（知识点出处）；必须讲透时才展开。':''}\n输出纯 JSON：\n{"subject":"","question_type":"单选题或多选题","question_text":"","options":{"A":"","B":"","C":"","D":""},"correct_answer":"","knowledge_point":"","exam_history":"","analysis":{"A":"","B":""},"user_answer_analysis":""}`;
 }
 
 async function analyze(){
