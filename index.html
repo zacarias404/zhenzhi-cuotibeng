@@ -203,6 +203,8 @@ textarea{resize:vertical;min-height:108px;line-height:1.7}
 .fill{height:100%;background:var(--ink)}
 .bnum{text-align:right;color:var(--mut);font-family:var(--mono)}
 .donut{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.grid>*{min-width:0}
+.card{min-width:0;max-width:100%}
 .donut .ring{position:relative;width:150px;height:150px;flex:none}
 .donut svg{width:100%;height:100%;transform:rotate(-90deg)}
 .donut circle.seg{animation:donutIn .75s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i)*70ms)}
@@ -210,15 +212,17 @@ textarea{resize:vertical;min-height:108px;line-height:1.7}
 .donut .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
 .donut .ctr b{font-family:var(--serif);font-size:26px;line-height:1;color:var(--ink)}
 .donut .ctr small{font-size:10px;color:var(--mut);margin-top:3px;letter-spacing:.05em}
-.donut .lg{flex:1;min-width:140px}
+.donut .lg{flex:1;min-width:0}
 .donut .li{display:flex;align-items:center;gap:8px;font-size:11px;padding:5px 0;border-bottom:1px solid var(--hair2);animation:fadeIn .5s ease both;animation-delay:calc(var(--i)*50ms + .25s)}
+.donut .li span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.donut .li em{flex:none}
 .donut .li i{width:9px;height:9px;border-radius:50%;flex:none}
 .donut .li span{flex:1;color:var(--ink2)}
 .donut .li em{font-style:normal;color:var(--mut);font-family:var(--mono)}
-.vbars{display:flex;gap:10px;height:140px;padding-top:4px;align-items:stretch}
-.vb{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}
+.vbars{display:flex;gap:14px;height:140px;padding-top:4px;align-items:stretch;justify-content:center}
+.vb{flex:0 1 64px;min-width:44px;max-width:64px;display:flex;flex-direction:column;align-items:center}
 .vb .vnum{font-family:var(--mono);font-size:11px;color:var(--mut);height:16px;line-height:16px}
-.vb .vtrack{flex:1;width:100%;max-width:52px;display:flex;align-items:flex-end}
+.vb .vtrack{flex:1;width:100%;max-width:34px;display:flex;align-items:flex-end}
 .vb .vcol{width:100%;height:var(--h);background:var(--c);transform-origin:bottom;animation:barIn .6s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i)*70ms)}
 .vb .vlab{font-size:10px;color:var(--mut);margin-top:8px;line-height:14px;height:14px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 @keyframes barIn{from{transform:scaleY(0)}to{transform:scaleY(1)}}
@@ -282,9 +286,10 @@ textarea{resize:vertical;min-height:108px;line-height:1.7}
   .donut circle.seg{stroke-dasharray:var(--len) var(--cir)}
   .vb .vcol{transform:none}
 }
-.rec{display:flex;gap:8px;align-items:center;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--hair2)}
-.rec .x{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif)}
-.rec .d{font-family:var(--mono);font-size:10px;color:var(--mut)}
+.rec{display:flex;gap:8px;align-items:flex-start;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--hair2)}
+.rec .x{flex:1;min-width:0;word-break:break-word;overflow-wrap:anywhere;font-family:var(--serif);line-height:1.6}
+.rec .d{font-family:var(--mono);font-size:10px;color:var(--mut);flex:none;white-space:nowrap}
+.rec .badge{flex:none}
 
 /* ===== 说明 ===== */
 .help{font-size:12px;color:var(--ink2);line-height:1.85}
@@ -943,7 +948,7 @@ function renderStats(){
   $('#typeChart').innerHTML=vbars(type,{});
   $('#yearChart').innerHTML=vbars(years,{});
   const rec=questions.slice(0,6);
-  $('#recent').innerHTML=rec.length?rec.map(q=>'<div class="rec"><span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span><span class="x">'+esc((q.question_text||'').slice(0,30))+'</span><span class="d">'+esc((q.created_at||'').slice(5,10))+'</span></div>').join(''):'<div class="hint">暂无记录</div>';
+  $('#recent').innerHTML=rec.length?rec.map(q=>'<div class="rec"><span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span><span class="x">'+esc((q.question_text||'').slice(0,60))+'</span><span class="d">'+esc((q.created_at||'').slice(5,10))+'</span></div>').join(''):'<div class="hint">暂无记录</div>';
 }
 function stat(n,l){return '<div class="stat"><div class="n">'+esc(n)+'</div><div class="l">'+esc(l)+'</div></div>'}
 function donut(data,c){
