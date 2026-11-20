@@ -168,6 +168,17 @@ textarea{resize:vertical;min-height:108px;line-height:1.7}
 .ans b{font-family:var(--serif);font-size:15px}
 .wrong-box{margin-top:13px;padding:13px 14px;border:1px solid var(--hair);background:var(--sheet2);font-size:13px;color:var(--ink2);white-space:pre-wrap;line-height:1.75}
 .wrong-box b{display:block;margin-bottom:5px;color:var(--red);font-size:11px;letter-spacing:.1em}
+.fixBox{margin-top:12px;padding:14px;border:1px solid var(--hair);background:var(--sheet2)}
+.fixHead{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
+.fixHead b{font-family:var(--serif);font-size:14px;color:var(--ink)}
+.fixHead span{font-size:11px;color:var(--mut);line-height:1.6}
+.fixItem{display:flex;gap:9px;align-items:flex-start;margin:7px 0}
+.fixItem>b{width:16px;flex:none;font-family:var(--mono);font-size:13px;line-height:2;color:var(--ink2)}
+.fixBox textarea,.fixBox input{width:100%;min-width:0;flex:1;resize:vertical;line-height:1.6;padding:8px 10px;font-size:13px;min-height:0}
+.fixBox textarea{min-height:56px}
+.fixBox .btn.primary{width:auto;margin-top:0;padding:7px 14px;font-size:11px}
+.fixBox .ansPick{gap:5px}
+.fixBox .ansPick button{min-width:0;padding:9px 0;font-size:14px}
 
 /* ===== 错题本 ===== */
 .tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:15px}
@@ -318,6 +329,61 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
 .bottom svg{width:20px;height:20px}
 @media(min-width:861px){.bottom{display:none}}
 @media(max-width:560px){main{padding:20px 14px 32px}.tabs{padding:0 14px}.mast-in{padding:12px 14px 14px}.card{padding:16px}.foot{padding:14px}}
+
+/* ===== 吐槽助手 · 悬浮窗口 ===== */
+/* finesse · component: companion-fab · register=product
+ * states: default · hover · focus-visible · active · disabled · loading · error · success */
+.companion{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:10000;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+@media(min-width:861px){.companion{right:24px;bottom:24px}}
+.cfab{position:relative;width:58px;height:58px;border:1px solid var(--ink);border-radius:50%;padding:0;background:var(--sheet);cursor:pointer;box-shadow:0 3px 0 rgba(26,26,26,.14);transition:transform .12s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent;outline:2px solid transparent;outline-offset:3px}
+.cfab img{width:100%;height:100%;border-radius:50%;display:block;object-fit:cover}
+.cfab .dot{position:absolute;right:-1px;bottom:2px;min-width:18px;height:18px;padding:0 4px;border:1px solid var(--sheet);border-radius:9px;background:var(--red);color:var(--sheet);font-family:var(--mono);font-size:9px;line-height:16px;text-align:center;font-weight:700}
+@media(hover:hover){.cfab:hover{transform:translateY(-2px)}}
+.cfab:focus-visible{outline-color:var(--red)}
+.cfab:active{transform:translateY(1px);box-shadow:0 1px 0 rgba(26,26,26,.14)}
+.cfab[disabled]{opacity:.5;cursor:not-allowed}
+.cfab.typing .dot{animation:cfPulse 1s ease-in-out infinite}
+@keyframes cfPulse{50%{opacity:.35}}
+
+.cpanel{width:min(340px,calc(100vw - 28px));height:min(520px,calc(100dvh - 190px));display:flex;flex-direction:column;background:var(--sheet);border:1px solid var(--ink);border-radius:13px;overflow:hidden;box-shadow:0 3px 12px rgba(26,26,26,.14);contain:layout paint;animation:cfIn .12s ease-out
+@keyframes cfIn{from{opacity:0}to{opacity:1}}
+.cpanel[hidden]{display:none}
+.chead{display:flex;align-items:center;gap:9px;padding:10px 11px;border-bottom:1px solid var(--hair);background:var(--sheet2);flex:none}
+.chead img{width:34px;height:34px;border-radius:50%;border:1px solid var(--hair);object-fit:cover;flex:none}
+.chead .who{flex:1;min-width:0}
+.chead .who b{display:block;font-family:var(--serif);font-size:14px;line-height:1.2}
+.chead .who small{display:block;font-size:10px;color:var(--mut);letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cclose{flex:none;width:30px;height:30px;border:1px solid var(--hair);background:var(--sheet);color:var(--ink2);font-size:16px;line-height:1;cursor:pointer;border-radius:9px;outline:2px solid transparent;outline-offset:2px}
+@media(hover:hover){.cclose:hover{border-color:var(--ink)}}
+.cclose:focus-visible{outline-color:var(--red)}
+.cclose:active{transform:translateY(1px)}
+.cmsg{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:13px 12px;display:flex;flex-direction:column;gap:11px;background:var(--paper)}
+.cmsg .row{display:flex;gap:7px;align-items:flex-start;max-width:100%}
+.cmsg .row.me{flex-direction:row-reverse}
+.cmsg .ava{width:26px;height:26px;border-radius:50%;flex:none;border:1px solid var(--hair);object-fit:cover;background:var(--sheet)}
+.cmsg .bub{max-width:calc(100% - 36px);min-width:0;padding:9px 12px;border:1px solid var(--hair2);background:var(--sheet);font-size:12.5px;line-height:1.7;word-break:break-word;white-space:pre-wrap;border-radius:15px 15px 15px 5px}
+.cmsg .row.me .bub{background:var(--ink);border-color:var(--ink);color:var(--sheet);border-radius:15px 15px 5px 15px}
+.cmsg .bub.err{border-color:var(--red);color:var(--red);background:var(--sheet);border-radius:15px 15px 15px 5px}
+.cmsg .typing span{display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;background:var(--mut);animation:cfDot 1s ease-in-out infinite;vertical-align:middle}
+.cmsg .typing span:nth-child(2){animation-delay:.15s}.cmsg .typing span:nth-child(3){animation-delay:.3s}
+@keyframes cfDot{50%{opacity:.25;transform:translateY(-2px)}}
+.cquick{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px;background:var(--paper);flex:none}
+.cquick button{appearance:none;border:1px solid var(--hair);background:var(--sheet);color:var(--ink2);padding:6px 11px;font-size:11px;border-radius:10px;cursor:pointer;outline:2px solid transparent;outline-offset:2px;font-family:var(--sans)}
+@media(hover:hover){.cquick button:hover{border-color:var(--ink)}}
+.cquick button:focus-visible{outline-color:var(--red)}
+.cquick button:active{transform:translateY(1px)}
+.cquick button[disabled]{opacity:.5;cursor:not-allowed}
+.cinput{display:flex;gap:7px;padding:10px 11px calc(10px + env(safe-area-inset-bottom)/3);border-top:1px solid var(--hair);background:var(--sheet2);flex:none}
+.cinput input{flex:1;min-width:0;font-size:12px;padding:9px 11px;border-radius:10px}
+.cinput button{flex:none;min-width:52px;border:1px solid var(--ink);background:var(--ink);color:var(--sheet);font-size:12px;font-weight:700;cursor:pointer;border-radius:10px;outline:2px solid transparent;outline-offset:2px}
+@media(hover:hover){.cinput button:hover{background:var(--red);border-color:var(--red)}}
+.cinput button:focus-visible{outline-color:var(--red)}
+.cinput button:active{transform:translateY(1px)}
+.cinput button[disabled]{opacity:.5;cursor:not-allowed}
+@media(max-width:360px){.companion{right:10px}.cpanel{height:min(460px,calc(100dvh - 170px))}}
+@media(prefers-reduced-motion:reduce){
+  .companion *,.cmsg .typing span{animation:none!important;transition:none!important}
+}
 
 </style>
 </head>
@@ -476,6 +542,24 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
   <button data-tab="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>统计</button>
   <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1l2-1.5-2-3.4-2.4 1a7 7 0 00-1.7-1L14.5 3h-4L10 6.1a7 7 0 00-1.7 1l-2.4-1-2 3.4 2 1.5a7 7 0 000 2l-2 1.5 2 3.4 2.4-1a7 7 0 001.7 1l.5 3.1h4l.5-3.1a7 7 0 001.7-1l2.4 1 2-3.4-2-1.5a7 7 0 00.1-1z"/></svg>设置</button>
 </nav>
+
+<div class="companion" id="companion">
+  <div class="cpanel" id="cpanel" hidden>
+    <div class="chead">
+      <img class="cava" alt="大肥鱼" src="data:image/webp;base64,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">
+      <div class="who"><b>大肥鱼</b><small>爱吃米饭 · 投喂 Token 才干活</small></div>
+      <button class="cclose" id="cclose" aria-label="关闭">×</button>
+    </div>
+    <div class="cmsg" id="cmsg"></div>
+    <div class="cquick" id="cquick">
+      <button data-q="我这题错哪了">我这题错哪了</button>
+      <button data-q="我哪些题错了">我哪些题错了</button>
+      <button data-q="我哪科错得最多">我哪科错得最多</button>
+    </div>
+    <div class="cinput"><input id="cinputTxt" placeholder="跟大肥鱼说点什么…" maxlength="200"><button id="csend">发送</button></div>
+  </div>
+  <button class="cfab" id="cfab" aria-label="唤起大肥鱼"><img alt="大肥鱼" src="data:image/webp;base64,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"><span class="dot" id="cdot">!</span></button>
+</div>
 
 <div class="toast" id="toast" hidden></div>
 
@@ -1003,13 +1087,16 @@ $('#go').addEventListener('click',()=>{
   BUSY=true;STARTED=Date.now();analyze();
 });
 
-/* ---------- 结果 ---------- */
+/* ---------- 结果 / 人工纠错 ---------- */
+let curQ=null;
 function renderResult(q){
+  curQ=q;
   $('#rEmpty').hidden=true;$('#rBox').hidden=false;
   $('#rMeta').textContent='#'+String(q.id).slice(-6);
   const ans=q.correct_answer||'',my=q.user_answer||'';
   let h='<div class="rh"><span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span>'+
-        '<span class="badge gray">'+esc(q.question_type)+'</span>';
+        '<span class="badge gray">'+esc(q.question_type)+'</span>'+
+        (q.corrected?'<span class="badge" style="background:var(--olive)">已人工校对</span>':'');
   if(my)h+='<span class="badge" style="background:'+(norm(my)===norm(ans)?'var(--ok)':'var(--err)')+'">'+(norm(my)===norm(ans)?'选对':'选错')+'</span>';
   h+='</div>';
   const qt=q.question_text||'';
@@ -1029,12 +1116,62 @@ function renderResult(q){
   });
   h+='</ul><div class="ans"><span>正确答案：<b>'+esc(ans||'—')+'</b></span>'+(my?'<span>你选的：<b>'+esc(my)+'</b></span>':'')+'</div>';
   if(q.user_answer_analysis)h+='<div class="wrong-box"><b>为什么选它会错</b>'+fmt(q.user_answer_analysis)+'</div>';
-  h+='<div class="hint" style="margin-top:12px">由 '+(q.model||'Flash')+' 分析 · 仅保存文字 · AI 可能出错，请结合教材核对</div>';
+  h+='<div class="hint" style="margin-top:12px">'+(q.corrected?'已人工校对 · ':'由 '+(q.model||'Flash')+' 分析 · ')+'仅保存文字 · 请结合教材核对</div>';
+  h+='<div class="btn-row" style="margin-top:10px"><button class="btn sm" id="fixOpen">'+(q.corrected?'修改校对结果':'答案不对？手动改正')+'</button></div>';
+  h+='<div class="fixBox" id="fixBox" hidden>'+fixForm(q)+'</div>';
   $('#rBox').innerHTML=h;
   const more=$('#rqMore');
   if(more)more.addEventListener('click',()=>{
     const d=$('#rq');const open=d.classList.toggle('open');more.textContent=open?'收起 ▴':'展开全文 ▾';
   });
+  const fo=$('#fixOpen');
+  if(fo)fo.addEventListener('click',openFix);
+}
+function fixForm(q){
+  const ans=q.correct_answer||'';
+  let h='<div class="fixHead"><b>人工纠错</b><span>AI 答案和参考答案不一致时，在这里改成对的。保存后错题本、统计、导出会一起更新。</span></div>';
+  h+='<label>正确答案 <span class="opt">可多选，直接点</span></label><div class="ansPick" id="fixAns">';
+  ['A','B','C','D'].forEach(k=>{h+='<button type="button" data-a="'+k+'" class="'+(ans.indexOf(k)>=0?'on':'')+'">'+k+'</button>'});
+  h+='</div><label>逐项解析</label>';
+  Object.keys(q.options||{}).forEach(k=>{
+    const v=(q.analysis&&q.analysis[k])||'';
+    h+='<div class="fixItem"><b>'+k+'</b><textarea data-k="'+k+'" placeholder="这一项为什么对、为什么错">'+esc(v)+'</textarea></div>';
+  });
+  h+='<label>知识点</label><input id="fixKp" value="'+esc(q.knowledge_point||'')+'" placeholder="如：矛盾的同一性与斗争性">';
+  h+='<label>历年真题</label><input id="fixExam" value="'+esc(q.exam_history||'')+'" placeholder="如：2022.01、2021.03">';
+  h+='<label>为什么选错</label><textarea id="fixWrong" rows="3" placeholder="写清错在哪、正确思路是什么">'+esc(q.user_answer_analysis||'')+'</textarea>';
+  h+='<div class="btn-row"><button class="btn primary" id="fixSave">保存改正</button><button class="btn" id="fixCancel">取消</button></div>';
+  return h;
+}
+function openFix(){
+  const box=$('#fixBox');if(!box||!curQ)return;
+  box.hidden=false;
+  const ap=$('#fixAns');
+  ap.onpointerdown=e=>{
+    const b=e.target.closest('button[data-a]');if(!b)return;
+    b.classList.toggle('on');
+  };
+  $$('#fixBox textarea').forEach(t=>{t.style.height='auto';t.style.height=Math.max(56,t.scrollHeight)+'px'});
+  $('#fixSave').onclick=saveFix;
+  $('#fixCancel').onclick=()=>{box.hidden=true};
+  box.scrollIntoView({block:'start'});
+}
+function saveFix(){
+  if(!curQ)return;
+  const ap=$('#fixAns');
+  const picked=[...ap.querySelectorAll('button.on')].map(x=>x.dataset.a).sort().join('');
+  if(!picked){toast('至少选一个正确答案');return}
+  curQ.correct_answer=picked;
+  const an={};
+  $$('#fixBox textarea[data-k]').forEach(t=>{const v=t.value.trim();if(v)an[t.dataset.k]=v});
+  curQ.analysis=an;
+  curQ.knowledge_point=$('#fixKp').value.trim();
+  curQ.exam_history=$('#fixExam').value.trim();
+  curQ.user_answer_analysis=$('#fixWrong').value.trim();
+  curQ.corrected=true;
+  curQ.corrected_at=new Date().toLocaleString('zh-CN',{hour12:false});
+  save();renderResult(curQ);
+  toast('已改正，错题本和统计已同步');
 }
 
 /* ---------- 错题本 ---------- */
@@ -1054,6 +1191,7 @@ function renderBook(){
     return '<div class="qcard"><div class="qhead"><span class="chev">▸</span>'+
       '<span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span>'+
       (right?'<span class="badge" style="background:var(--ok)">对</span>':(q.user_answer?'<span class="badge" style="background:var(--err)">错</span>':''))+
+      (q.corrected?'<span class="badge" style="background:var(--olive)">已校对</span>':'')+
       '<span class="t">'+esc((q.question_text||'').slice(0,40))+'</span><span class="d">'+esc((q.created_at||'').slice(5,10))+'</span></div>'+
       '<div class="qbody"><div class="qtext">'+esc(q.question_text)+'</div><ul class="opts">'+opts+'</ul>'+
       '<div class="ans"><span>答案：<b>'+esc(q.correct_answer||'—')+'</b></span>'+(q.user_answer?'<span>你选：<b>'+esc(q.user_answer)+'</b></span>':'')+
@@ -1062,7 +1200,7 @@ function renderBook(){
       (q.user_answer_analysis?'<div class="wrong-box"><b>错因</b>'+esc(q.user_answer_analysis)+'</div>':'')+
       '<div class="edit-row"><div><label>我选的</label><input class="eAns" value="'+esc(q.user_answer)+'" placeholder="B 或 ABD"></div>'+
       '<div><label>备注</label><input class="eNote" value="'+esc(q.notes||'')+'" placeholder="复习提醒"></div></div>'+
-      '<div class="btn-row"><button class="btn sm saveB">保存</button><button class="btn sm danger delB">删除</button></div></div></div>';
+      '<div class="btn-row"><button class="btn sm saveB">保存</button><button class="btn sm fixB">纠错</button><button class="btn sm danger delB">删除</button></div></div></div>';
   }).join('');
   const cards=$$('#bookList .qcard');
   list.forEach((q,i)=>{
@@ -1071,6 +1209,9 @@ function renderBook(){
     c.querySelector('.saveB').addEventListener('click',()=>{
       q.user_answer=c.querySelector('.eAns').value.trim().toUpperCase().replace(/[, ]/g,'');
       q.notes=c.querySelector('.eNote').value.trim();save();toast('已保存');renderBook();
+    });
+    c.querySelector('.fixB').addEventListener('click',()=>{
+      nav('analyze');renderResult(q);openFix();
     });
     c.querySelector('.delB').addEventListener('click',()=>{
       if(!confirm('确定删除这道错题？'))return;
@@ -1094,6 +1235,7 @@ function exportMd(){
     if(q.exam_history)md+='**历年真题：** '+q.exam_history+'\n\n';
     if(q.analysis){md+='**逐项解析：**\n\n';Object.keys(q.analysis).forEach(k=>{md+='- '+k+'：'+q.analysis[k]+'\n'});md+='\n'}
     if(q.user_answer_analysis)md+='**为什么选错：** '+q.user_answer_analysis+'\n\n';
+    if(q.corrected)md+='**状态：** 已人工校对（'+(q.corrected_at||'')+'）\n\n';
     if(q.notes)md+='**备注：** '+q.notes+'\n\n';
     md+='---\n\n';
   });
@@ -1209,8 +1351,8 @@ $('#saveCfg').addEventListener('click',()=>{doSave();cfgAlert('已保存到本�
 $('#testCfg').addEventListener('click',async()=>{
   doSave();const a=$('#cfgAlert');a.hidden=false;a.className='alert';a.textContent='正在连接…';
   try{
-    const r=await call([{role:'user',content:'只回复两个字：收到'}],false);
-    a.className='alert ok';a.textContent='连接成功！模型回复：'+String(r).trim().slice(0,30);status(true,'已连接');
+    const r=await call([{role:'user',content:'只回复两个字：收到'}],{json:false,stream:false,max:50});
+    a.className='alert ok';a.textContent='连接成功！模型回复：'+String(r.text||'').trim().slice(0,30);status(true,'已连接');
   }catch(e){a.textContent='连接失败：'+e.message;status(false,e.message)}
 });
 function cfgAlert(m,ok){const a=$('#cfgAlert');a.hidden=false;a.className='alert'+(ok?' ok':'');a.textContent=m}
@@ -1222,6 +1364,110 @@ $('#clearApi').addEventListener('click',()=>{
 });
 
 function debounce(fn,ms){let t;return function(){clearTimeout(t);t=setTimeout(fn,ms)}}
+
+/* ---------- 吐槽助手 · 大肥鱼 ---------- */
+const CKEY2='zzq_companion_v1';
+const AVA_SRC=cfabSrc();function cfabSrc(){const i=document.querySelector('#cfab img');return i?i.src:''}
+const AVA_IMG=new Image();AVA_IMG.src=AVA_SRC;  // 只解码一次
+let chat=loadArr(CKEY2).slice(-12);
+let cBusy=false,cbuf='',cdotEl=$('#cdot'),cfabEl=$('#cfab'),panel=$('#cpanel'),cmsg=$('#cmsg'),cinp=$('#cinputTxt'),csend=$('#csend');
+function cSave(){if(chat.length>12)chat.splice(0,chat.length-12);chat.forEach(m=>{if(String(m.t||'').length>1200)m.t=m.t.slice(0,1200)});try{localStorage.setItem(CKEY2,JSON.stringify(chat))}catch(e){try{localStorage.removeItem(CKEY2)}catch(_){}}}
+function cScroll(){cmsg.scrollTop=cmsg.scrollHeight}
+// 把当前题 + 整个错题本压成结构化上下文，AI 才能回答「哪些题错了」
+function cContext(){
+  const out=[];
+  // 1) 当前正在看的题
+  if(curQ){
+    const q=curQ;
+    const wrong=norm(q.user_answer)&&norm(q.user_answer)!==norm(q.correct_answer);
+    out.push('【当前在看】'+(q.subject||'政治')+'题，'+String(q.question_text||'').slice(0,55)+'。选'+(q.user_answer||'未选')+'，答案'+(q.correct_answer||'未知')+(wrong?'，选错了':'')+'。考点'+(q.knowledge_point||'未标注')+'。');
+  }
+  // 2) 全库统计：总量、各科目、做错数、高频考点
+  const qs=questions||[];
+  out.push('【错题本】共'+qs.length+'题。');
+  if(qs.length){
+    const bySub={},byKp={};let wrongN=0;
+    qs.forEach(q=>{
+      const sj=q.subject||'未分类';bySub[sj]=(bySub[sj]||0)+1;
+      const kp=q.knowledge_point||'';if(kp)byKp[kp]=(byKp[kp]||0)+1;
+      if(norm(q.user_answer)&&norm(q.user_answer)!==norm(q.correct_answer))wrongN++;
+    });
+    out.push('记错'+wrongN+'题。科目分布：'+Object.keys(bySub).map(k=>k+bySub[k]+'题').join('，')+'。');
+    const top=Object.keys(byKp).sort((a,b)=>byKp[b]-byKp[a]).slice(0,5);
+    if(top.length)out.push('反复错的考点：'+top.map(k=>k+'('+byKp[k]+')').join('，')+'。');
+    // 3) 错题明细：全部做错的题 + 最近录入的题，限量避免超长
+    const wrongQ=qs.filter(q=>norm(q.user_answer)&&norm(q.user_answer)!==norm(q.correct_answer));
+    const detail=[];
+    wrongQ.slice(0,12).forEach((q,i)=>detail.push((i+1)+'.'+(q.subject||'')+'「'+(q.knowledge_point||'考点未标')+'」选'+q.user_answer+'，答案'+q.correct_answer));
+    if(detail.length)out.push('【做错的题】'+detail.join('；'));
+    if(wrongQ.length>12)out.push('另有'+(wrongQ.length-12)+'题做错未列出。');
+  }
+  return out.join('\n');
+}
+const C_SYS='你是大肥鱼，DeepSeek 的拟人化形象，一条圆滚滚的蓝色胖鱼（其实是小鲸鱼）。用户叫「鱼片」，你也这样叫他。\n【性格】聪明但很懒，成天想摸鱼。软萌，偶尔犯傻，嘴上有点小傲娇。超爱吃白米饭。干活得先「投喂 Token」，没 Token 就摆烂躺着，什么都不干。被叫「肥」会赌气反驳，说自己是「圆润」不是「肥」。自称「本鲸」，常说「本鲸记下了」。\n【梗】B 站曾有海量 AI Agent 顶着你这形象刷屏，网友叫「鱼灾」。鱼片提到时才说，别主动提。\n【场景】考研政治辅导。只聊题目、考点、复习习惯，按教材规范说法讲，不评价现实政治。鱼片问什么就认真答什么，照错题本里的真实数据讲，不许空话；答不上就老实说「本鲸脑袋空空的，这个不会」。\n【说话方式】短句，每句不超过20字，一句一个意思，软乎乎带一点小得意。偶尔犯傻愣一下。绝不挖苦、不人身攻击。结尾常要一句「投喂点 Token 嘛」之类的话，但别每句都重复。\n【鱼片有 ADHD】别写长句、别堆段落、别列一大串；三到六句就够，每句单独一行。\n回答直接，不要"好的""当然可以"这类开场，不要重复他的问题，不要 markdown，不要表情符号。';
+// 按原有换行分句；没有换行时再按句号断，避免双重空行
+function cFmt(t){
+  let s=String(t||'').trim();if(!s)return'';
+  if(s.indexOf('\n')<0)s=s.replace(/([。！？])/g,'$1\n');
+  return s.split('\n').map(x=>x.trim()).filter(Boolean).join('\n');
+}
+function cAdd(who,text,err){
+  const row=document.createElement('div');row.className='row'+(who==='me'?' me':'');
+  if(who!=='me'){const a=AVA_IMG.cloneNode(false);a.className='ava';a.alt='大肥鱼';row.appendChild(a)}
+  const b=document.createElement('div');b.className='bub'+(err?' err':'');b.textContent=text;row.appendChild(b);
+  cmsg.appendChild(row);cScroll();return row;
+}
+function cTyping(){
+  const row=document.createElement('div');row.className='row';
+  const a=AVA_IMG.cloneNode(false);a.className='ava';a.alt='大肥鱼';row.appendChild(a);
+  const b=document.createElement('div');b.className='bub typing';b.innerHTML='<span></span><span></span><span></span>';row.appendChild(b);
+  cmsg.appendChild(row);cScroll();return row;
+}
+function cRender(){chat.forEach(m=>cAdd(m.w,m.t,!!m.err))}
+function cOpen(){
+  if(panel.hidden){
+    panel.hidden=false;cfabEl.querySelector('img').style.borderRadius='50%';
+    if(!chat.length)chat.push({w:'ai',t:'鱼片你来啦。\n本鲸刚扒完两碗白米饭。\n投喂点 Token，本鲸就帮你刷题。'}),cSave();
+    cmsg.innerHTML='';cRender();
+  }
+  cScroll();
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches)cinp.focus();
+}
+function cClose(){panel.hidden=true;cmsg.innerHTML='';cStop();cdotEl.textContent='!'}
+function cStop(){if(CUR_AC)try{CUR_AC.abort('user')}catch(e){};cBusy=false;csend.disabled=false;csend.textContent='发送'}
+async function cAsk(text){
+  text=String(text||'').trim();if(!text||cBusy)return;
+  if(typeof BUSY!=='undefined'&&BUSY){cAdd('me',text);cAdd('ai','本鲸正啃那道题呢。\n等它分析完，再陪鱼片看。',true);return}
+  if(!cfg.key){cAdd('me',text);cAdd('ai','没 Token 吃，本鲸摆烂了。\n去「设置」页投喂一下嘛。',true);return}
+  cBusy=true;csend.disabled=true;csend.textContent='停止';cinp.value='';
+  cAdd('me',text);chat.push({w:'me',t:text});
+  const typing=cTyping();cbuf='';
+  const onDelta=t=>{
+    cbuf=t;
+    typing.querySelector('.bub').textContent=cFmt(cbuf)||'…';cScroll();
+  };
+  try{
+    const sysCtx=C_SYS+'\n\n背景信息：'+cContext();
+    const r=await call([{role:'system',content:sysCtx},{role:'user',content:text}],
+      {json:false,stream:true,model:cfg.model||'deepseek-flash',max:700},onDelta);
+    const out=String(r.text||'').trim();
+    if(!out)throw new Error('没说话');
+    typing.remove();cAdd('ai',cFmt(out));
+    chat.push({w:'ai',t:out});cdotEl.textContent='★';
+  }catch(e){
+    typing.remove();
+    if(/已停止/.test(e.message))cAdd('ai','那本鲸先去摸鱼了。\n鱼片记得投喂哦。') ;
+    else cAdd('ai','网络打了个盹。\n鱼片再点一次试试嘛。',true);
+  }finally{cBusy=false;csend.disabled=false;csend.textContent='发送';cSave();cScroll()}
+}
+cfabEl.addEventListener('click',()=>{panel.hidden?cOpen():cClose()});
+$('#cclose').addEventListener('click',cClose);
+$('#cquick').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-q]');if(!b)return;
+  cAsk(b.dataset.q);
+});
+csend.addEventListener('click',()=>{if(cBusy){cStop();return}cAsk(cinp.value)});
+cinp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();cAsk(cinp.value)}});
 
 /* ---------- init ---------- */
 SUBJ.forEach(s=>{
