@@ -106,6 +106,10 @@ label .opt{font-weight:400;color:var(--mut);font-size:10px;margin-left:6px;lette
 input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--hair);border-radius:2px;background:var(--sheet);color:var(--ink);font-family:var(--sans);font-size:14px;outline:none;transition:.15s}
 input:focus,textarea:focus,select:focus{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 textarea{resize:vertical;min-height:108px;line-height:1.7}
+.ansPick{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 4px}
+.ansPick button{flex:1;min-width:52px;appearance:none;border:1px solid var(--hair);background:var(--sheet);color:var(--ink2);font-family:var(--mono);font-size:15px;font-weight:700;padding:11px 0;border-radius:2px;cursor:pointer;transition:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.ansPick button:hover{border-color:var(--ink)}
+.ansPick button.on{border-color:var(--ink);color:var(--sheet);background:var(--ink)}
 .hint{font-size:11px;color:var(--mut);margin-top:5px;letter-spacing:.02em}
 .pwd-row{position:relative}
 .pwd-row input{padding-right:60px}
@@ -198,6 +202,86 @@ textarea{resize:vertical;min-height:108px;line-height:1.7}
 .track{height:7px;background:var(--hair2);border-radius:0}
 .fill{height:100%;background:var(--ink)}
 .bnum{text-align:right;color:var(--mut);font-family:var(--mono)}
+.donut{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.donut .ring{position:relative;width:150px;height:150px;flex:none}
+.donut svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donut circle.seg{animation:donutIn .75s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i)*70ms)}
+@keyframes donutIn{from{stroke-dasharray:0 var(--cir)}to{stroke-dasharray:var(--len) var(--cir)}}
+.donut .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donut .ctr b{font-family:var(--serif);font-size:26px;line-height:1;color:var(--ink)}
+.donut .ctr small{font-size:10px;color:var(--mut);margin-top:3px;letter-spacing:.05em}
+.donut .lg{flex:1;min-width:140px}
+.donut .li{display:flex;align-items:center;gap:8px;font-size:11px;padding:5px 0;border-bottom:1px solid var(--hair2);animation:fadeIn .5s ease both;animation-delay:calc(var(--i)*50ms + .25s)}
+.donut .li i{width:9px;height:9px;border-radius:50%;flex:none}
+.donut .li span{flex:1;color:var(--ink2)}
+.donut .li em{font-style:normal;color:var(--mut);font-family:var(--mono)}
+.vbars{display:flex;gap:10px;height:140px;padding-top:4px;align-items:stretch}
+.vb{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center}
+.vb .vnum{font-family:var(--mono);font-size:11px;color:var(--mut);height:16px;line-height:16px}
+.vb .vtrack{flex:1;width:100%;max-width:52px;display:flex;align-items:flex-end}
+.vb .vcol{width:100%;height:var(--h);background:var(--c);transform-origin:bottom;animation:barIn .6s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i)*70ms)}
+.vb .vlab{font-size:10px;color:var(--mut);margin-top:8px;line-height:14px;height:14px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+@keyframes barIn{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes sealIn{from{opacity:0;transform:rotate(-18deg) scale(.86)}to{opacity:1;transform:rotate(-3deg) scale(1)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-9px)}to{opacity:1;transform:none}}
+
+/* ===== 全界面一次性入场动画：只动 transform/opacity，不循环、不监听滚动 ===== */
+.mast-in>*{animation:fadeIn .5s cubic-bezier(.16,1,.3,1) both}
+.mast-in>*:nth-child(2){animation-delay:.06s}
+.mast-in>*:nth-child(3){animation-delay:.12s}
+.seal{animation:sealIn .55s cubic-bezier(.16,1,.3,1) both}
+.tabs .tab{animation:slideIn .4s ease both}
+.tabs .tab:nth-child(2){animation-delay:.05s}
+.tabs .tab:nth-child(3){animation-delay:.1s}
+.tabs .tab:nth-child(4){animation-delay:.15s}
+.tabs .tab:nth-child(5){animation-delay:.2s}
+.panel.active .sec-head{animation:fadeIn .42s cubic-bezier(.16,1,.3,1) both}
+.panel.active .grid>*,.panel.active>.stats,.panel.active>.card,.panel.active>.note,.panel.active>.tools{animation:fadeIn .46s cubic-bezier(.16,1,.3,1) both}
+.panel.active .grid>*:nth-child(2),.panel.active>*:nth-child(3){animation-delay:.07s}
+.panel.active>*:nth-child(4){animation-delay:.12s}
+.panel.active>*:nth-child(5){animation-delay:.17s}
+.stat{animation:riseIn .45s cubic-bezier(.16,1,.3,1) both}
+.stat:nth-child(2){animation-delay:.06s}
+.stat:nth-child(3){animation-delay:.12s}
+.stat:nth-child(4){animation-delay:.18s}
+/* 列表项只给前 12 条错峰，长列表不叠加大量动画 */
+.qcard,.point,.rec{animation:fadeIn .36s ease both}
+.qcard:nth-child(n+2),.point:nth-child(n+2),.rec:nth-child(n+2){animation-delay:.04s}
+.qcard:nth-child(n+3),.point:nth-child(n+3),.rec:nth-child(n+3){animation-delay:.08s}
+.qcard:nth-child(n+4),.point:nth-child(n+4),.rec:nth-child(n+4){animation-delay:.12s}
+.qcard:nth-child(n+5),.point:nth-child(n+5),.rec:nth-child(n+5){animation-delay:.16s}
+.qcard:nth-child(n+6),.point:nth-child(n+6),.rec:nth-child(n+6){animation-delay:.2s}
+.qcard:nth-child(n+7),.point:nth-child(n+7),.rec:nth-child(n+7){animation-delay:.24s}
+.qcard:nth-child(n+8),.point:nth-child(n+8),.rec:nth-child(n+8){animation-delay:.28s}
+.qcard:nth-child(n+9),.point:nth-child(n+9),.rec:nth-child(n+9){animation-delay:.32s}
+.qcard:nth-child(n+10),.point:nth-child(n+10),.rec:nth-child(n+10){animation-delay:.36s}
+.qcard:nth-child(n+11),.point:nth-child(n+11),.rec:nth-child(n+11){animation-delay:.4s}
+.qcard:nth-child(n+12),.point:nth-child(n+12),.rec:nth-child(n+12){animation-delay:.44s}
+.qcard:nth-child(n+13),.point:nth-child(n+13),.rec:nth-child(n+13){animation:none}
+#rBox>*{animation:fadeIn .4s cubic-bezier(.16,1,.3,1) both}
+#rBox>*:nth-child(2){animation-delay:.05s}
+#rBox>*:nth-child(3){animation-delay:.1s}
+#rBox>*:nth-child(4){animation-delay:.15s}
+#rBox>*:nth-child(5){animation-delay:.2s}
+#rBox>*:nth-child(6){animation-delay:.25s}
+#rBox>*:nth-child(n+7){animation-delay:.3s}
+.empty .ei{animation:riseIn .5s ease both}
+/* 交互微动：hover / active 只用 transform */
+.btn:hover,.fileBtn:hover{transform:translateY(-1px)}
+.btn:active,.fileBtn:active,.tab:active{transform:translateY(0) scale(.98)}
+.tab:hover{color:var(--ink);transform:translateY(-1px)}
+.tab.active:hover{color:var(--red)}
+.drop:hover{transform:translateY(-2px)}
+.bottom button{transition:color .18s,transform .18s}
+.bottom button:active{transform:scale(.9)}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .spin{animation:sp .8s linear infinite!important;animation-duration:.8s!important}
+  .donut circle.seg{stroke-dasharray:var(--len) var(--cir)}
+  .vb .vcol{transform:none}
+}
 .rec{display:flex;gap:8px;align-items:center;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--hair2)}
 .rec .x{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif)}
 .rec .d{font-family:var(--mono);font-size:10px;color:var(--mut)}
@@ -277,8 +361,11 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
           </div>
         </div>
         <div id="areaText" hidden><textarea id="txt" placeholder="把题干和选项粘贴到这里…"></textarea></div>
-        <label>我选的选项 <span class="opt">选填，填了才分析错因</span></label>
-        <input type="text" id="myAns" placeholder="单选填 B，多选填 ABD" maxlength="10">
+        <label>我选的选项 <span class="opt">选填，点选即可；多选可点多个，再点一次取消</span></label>
+        <div class="ansPick" id="ansPick">
+          <button type="button" data-a="A">A</button><button type="button" data-a="B">B</button><button type="button" data-a="C">C</button><button type="button" data-a="D">D</button>
+        </div>
+        <input type="hidden" id="myAns">
         <button class="btn primary" id="go">开始识别与分析</button>
         <div class="progress" id="progress" hidden><div class="spin"></div><span id="progTxt">AI 正在识别题目…</span></div>
         <div class="alert" id="err" hidden></div>
@@ -348,6 +435,8 @@ summary{cursor:pointer;font-weight:700;font-size:12px;color:var(--ink);letter-sp
         <input type="text" id="cfgBase" placeholder="https://api.deepseek.com" style="margin-top:8px">
       </details>
       <div class="btn-row"><button class="btn" id="saveCfg">保存</button><button class="btn" id="testCfg">测试连接</button></div>
+      <div class="btn-row"><button class="btn danger" id="clearApi">一键清除 API 设置</button></div>
+      <div class="hint" style="margin-top:6px">只清空本机 API Key 与接口地址，错题本保留。</div>
       <div class="alert" id="cfgAlert" hidden></div>
     </div>
     <div class="card">
@@ -403,7 +492,7 @@ let file=null, mode='image', timer=null;
 
 function loadArr(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}}
 function loadObj(k){try{return JSON.parse(localStorage.getItem(k))||{}}catch(e){return{}}}
-function save(){localStorage.setItem(QKEY,JSON.stringify(questions))}
+function save(){localStorage.setItem(QKEY,JSON.stringify(questions));if($('#p-stats')&&$('#p-stats').classList.contains('active'))renderStats()}
 function saveCfg(){localStorage.setItem(CKEY,JSON.stringify(cfg))}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(timer);timer=setTimeout(()=>t.hidden=true,2500)}
@@ -562,18 +651,62 @@ async function call(messages,json){
   return d.choices[0].message.content;
 }
 function jsonOf(raw){
-  let t=raw.trim();
-  const f=t.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);if(f)t=f[1].trim();
+  let t=String(raw||'').trim();
+  const fence=t.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);if(fence)t=fence[1].trim();
   const s=t.indexOf('{'),e=t.lastIndexOf('}');
-  if(s<0||e<=s)throw new Error('AI 没返回有效结果，重试或换 Flash 模型。');
-  return JSON.parse(t.slice(s,e+1).replace(/,\s*([}\]])/g,'$1'));
+  if(s<0||e<=s)throw new Error('AI 没返回有效结果，请重试或换 Flash 模型。');
+  t=t.slice(s,e+1);
+  try{return JSON.parse(t)}catch(_){}
+  const fixed=fixJson(t);
+  try{return JSON.parse(fixed)}catch(_){}
+  const obj=pickFields(fixed);
+  if(obj.subject||obj.question_text)return obj;
+  throw new Error('AI 返回格式异常，请重试一次；反复出现请换 Flash 模型。');
+}
+// 把 JSON 字符串值内未转义的英文双引号、真实换行/制表符补转义
+function fixJson(src){
+  let out='',inStr=false,esc=false;
+  for(let i=0;i<src.length;i++){
+    const c=src[i];
+    if(!inStr){out+=c;if(c==='"')inStr=true;continue}
+    if(esc){out+=c;esc=false;continue}
+    if(c==='\\'){out+=c;esc=true;continue}
+    if(c==='"'){
+      let j=i+1;while(j<src.length&&/\s/.test(src[j]))j++;
+      const nx=src[j];
+      if(nx===','||nx==='}'||nx===']'||nx===':'||j>=src.length){out+=c;inStr=false}
+      else out+='\\"';
+      continue;
+    }
+    if(c==='\n'){out+='\\n';continue}
+    if(c==='\r'){out+='\\r';continue}
+    if(c==='\t'){out+='\\t';continue}
+    out+=c;
+  }
+  return out.replace(/,\s*([}\]])/g,'$1');
+}
+// 极端情况兜底：按已知字段逐个取值
+function pickFields(fixed){
+  const obj={};
+  const get=k=>{
+    const m=fixed.match(new RegExp('"'+k+'"\\s*:\\s*"((?:\\\\.|[^"\\\\])*)"'));
+    return m?m[1].replace(/\\n/g,'\n').replace(/\\"/g,'"'):'';
+  };
+  ['subject','question_type','question_text','correct_answer','knowledge_point','exam_history','user_answer_analysis'].forEach(k=>obj[k]=get(k));
+  const getObj=k=>{
+    const i=fixed.indexOf('"'+k+'"');if(i<0)return{};
+    const a=fixed.indexOf('{',i),b=fixed.indexOf('}',a);if(a<0||b<0)return{};
+    try{return JSON.parse(fixed.slice(a,b+1))}catch(_){return{}}
+  };
+  obj.options=getObj('options');obj.analysis=getObj('analysis');
+  return obj;
 }
 function file2b64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
 function mimeOf(f){const n=f.name.toLowerCase();if(n.endsWith('.png'))return'image/png';if(n.endsWith('.gif'))return'image/gif';if(n.endsWith('.webp'))return'image/webp';return'image/jpeg'}
 
-const SYS='这是中国研究生入学考试政治科目的公开练习题，属正规教育考试辅导场景。请仅从教材知识点和考试答题角度，用规范中性学术表述作答。你是资深考研政治辅导老师，回答该详则详、该简则简：关键辨析和教材原话要讲透，一般错误一句话点破并给翻书定位；不写套话和空泛铺陈，严格按要求输出纯 JSON。';
+const SYS='这是中国研究生入学考试政治科目的公开练习题，属正规教育考试辅导场景。只按教材和考试大纲讲知识点，用规范中性的学术术语。不评价现实政治、不讨论敏感事件、不延伸教材外内容；遇到可能触发审核的表述，改用教材规范说法，只讲考点本身，不要触碰限制词。用户有 ADHD：所有输出都用短句，每句不超过20字，一句一个意思，用句号或分号分隔；不写长句、不堆修饰、不铺垫、不啰嗦。需要讲清的内容用几个短句表达，不要用长难句。严格按要求输出纯 JSON。';
 function promptContent(my){
-  return `请完成解析。详略按题目需要：需要讲清的讲透彻，一般错误直截了当。\n1. 准确提取题干和选项。\n2. subject 从 [马原,毛中特,史纲,思修法治,时政] 选一。\n3. exam_history 必须给出至少3个该考点历年真题例子，格式为"2022.01、2021.03、2019.02"，用顿号分隔；这是硬性要求，严禁写"常见考点""以真题为准""具体年份以真题为准"之类空话。若无法精确到题号，至少写出考过的年份，如"2022、2021、2019"。\n4. analysis 逐项解析：一般错误选项直截了当说清哪里错、为什么错，并注明知识点出处（哪章/哪节或教材位置），方便回去翻书；只有涉及教材原话或必须讲透的难点才展开详细解释。不要无意义堆砌，也不要把该讲清的压成空话。\n5. knowledge_point 只写考点名称，不加解释。${my?'\n6. user_answer_analysis 直接说明为什么选'+my+'会错、错在哪，给出翻书定位（知识点出处）；必须讲透时才展开。':''}\n输出纯 JSON：\n{"subject":"","question_type":"单选题或多选题","question_text":"","options":{"A":"","B":"","C":"","D":""},"correct_answer":"","knowledge_point":"","exam_history":"","analysis":{"A":"","B":""},"user_answer_analysis":""}`;
+  return `请完成解析。用户有 ADHD，全部用短句，每句不超过20字、一句一个意思，用句号或分号断开；不写长句、不啰嗦、不铺垫，但必要信息别省，改用多个短句讲清。\n1. 准确提取题干和选项。\n2. subject 从 [马原,毛中特,史纲,思修法治,时政] 选一。\n3. exam_history 必须给出至少3个该考点历年真题例子，格式为"2022.01、2021.03、2019.02"，用顿号分隔；这是硬性要求，严禁写"常见考点""以真题为准""具体年份以真题为准"之类空话。若无法精确到题号，至少写出考过的年份，如"2022、2021、2019"。\n4. analysis 逐项解析：一般错误选项直截了当说清哪里错、为什么错，并注明知识点出处（哪章/哪节或教材位置），方便回去翻书；必须讲清的难点用短句分几条讲，别写成一大段。不要无意义堆砌，也不要把该讲清的压成空话。\n5. knowledge_point 只写考点名称，不加解释。${my?'\n6. user_answer_analysis 直接说明为什么选'+my+'会错、错在哪，给出翻书定位（知识点出处）；必须讲清时用短句分几条，别写成一大段。':''}\n注意：JSON 字符串值内不要出现未转义的英文双引号和真实换行，引用教材原话请用中文引号「」或书名号《》，避免破坏 JSON 格式。\n输出纯 JSON：\n{"subject":"","question_type":"单选题或多选题","question_text":"","options":{"A":"","B":"","C":"","D":""},"correct_answer":"","knowledge_point":"","exam_history":"","analysis":{"A":"","B":""},"user_answer_analysis":""}`;
 }
 
 async function analyze(){
@@ -600,10 +733,29 @@ async function analyze(){
     const model=(imageBytes&&cfg.model!=='deepseek-flash')?'deepseek-flash':cfg.model;
     const useModel=model;
     const realModel=cfg.model;cfg.model=useModel;
-    let raw;
-    try{raw=await call([{role:'system',content:SYS},{role:'user',content:uContent}],true)}
-    finally{cfg.model=realModel}
-    const o=jsonOf(raw);
+    // AI 偶尔返回空/纯文字/坏 JSON，自动重试一次并加强格式要求
+    let raw,o,lastErr;
+    try{
+      for(let attempt=0;attempt<2;attempt++){
+        let msg=uContent;
+        if(attempt>0){
+          $('#progTxt').textContent='返回格式异常，正在重试…';
+          const extra='\n\n重要：上一次返回无法解析。这次必须只输出一个完整、合法的 JSON 对象，不要任何解释文字，不要 markdown 代码块。';
+          msg=imageBytes
+            ?[{type:'text',text:content+extra},{type:'image_url',image_url:{url:'data:'+mime+';base64,'+imageBytes,detail:'high'}}]
+            :content+extra;
+        }
+        try{
+          raw=await call([{role:'system',content:SYS},{role:'user',content:msg}],true);
+          o=jsonOf(raw);lastErr=null;break;
+        }catch(e){
+          lastErr=e;
+          // 网络/配置类错误不重试，格式类错误才重试
+          if(/请求失败|服务暂时|API Key|HTTP/.test(e.message))break;
+        }
+      }
+    }finally{cfg.model=realModel}
+    if(lastErr)throw lastErr;
     const q=normQ(o);
     q.id=Date.now();q.created_at=new Date().toLocaleString('zh-CN',{hour12:false});
     q.user_answer=my;q.model=useModel;
@@ -786,20 +938,54 @@ function renderStats(){
     stat(by[top],'最多：'+top)+
     stat(marked,'已标记选项')+
     stat(marked?Math.round(wrong/marked*100)+'%':'—','标记题错误率');
-  $('#subjChart').innerHTML=bars(by,COLOR);
+  $('#subjChart').innerHTML=donut(by,COLOR);
   const type={};questions.forEach(q=>{const t=q.question_type||'单选题';type[t]=(type[t]||0)+1});
-  $('#typeChart').innerHTML=bars(type,{});
-  $('#yearChart').innerHTML=bars(years,{});
+  $('#typeChart').innerHTML=vbars(type,{});
+  $('#yearChart').innerHTML=vbars(years,{});
   const rec=questions.slice(0,6);
   $('#recent').innerHTML=rec.length?rec.map(q=>'<div class="rec"><span class="badge" style="background:'+color(q.subject)+'">'+esc(q.subject)+'</span><span class="x">'+esc((q.question_text||'').slice(0,30))+'</span><span class="d">'+esc((q.created_at||'').slice(5,10))+'</span></div>').join(''):'<div class="hint">暂无记录</div>';
 }
 function stat(n,l){return '<div class="stat"><div class="n">'+esc(n)+'</div><div class="l">'+esc(l)+'</div></div>'}
-function bars(data,c){
-  const es=Object.keys(data||{}).map(k=>[k,data[k]]);
-  if(!es.length)return '<div class="hint">暂无数据</div>';
-  const max=Math.max.apply(null,es.map(e=>e[1]).concat([1]));
-  return es.map(e=>'<div class="bar"><span>'+esc(e[0])+'</span><div class="track"><div class="fill" style="width:'+Math.max(2,e[1]/max*100)+'%;background:'+(c[e[0]]||'var(--p)')+'"></div></div><span class="bnum">'+e[1]+'</span></div>').join('');
+function donut(data,c){
+  const es=Object.keys(data||{}).filter(k=>data[k]>0).map(k=>[k,data[k]]);
+  const total=es.reduce((s,e)=>s+e[1],0);
+  const pal=['#e05263','#f08a3c','#3b9ae1','#9b6dd6','#2bb3a3','#8a6d3b','#7a5c9e','#4a7c7e'];
+  const R=52,CIR=2*Math.PI*R;
+  let acc=0,segs='';
+  es.forEach((e,i)=>{
+    const len=e[1]/total*CIR;
+    const col=(c&&c[e[0]])||pal[i%pal.length];
+    segs+='<circle class="seg" style="--i:'+i+';--len:'+len.toFixed(2)+';--cir:'+CIR.toFixed(2)+'" cx="60" cy="60" r="'+R+'" fill="none" stroke="'+col+'" stroke-width="16" stroke-dasharray="'+len.toFixed(2)+' '+(CIR-len).toFixed(2)+'" stroke-dashoffset="'+(-acc).toFixed(2)+'"/>';
+    acc+=len;
+  });
+  const ring='<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="'+R+'" fill="none" stroke="var(--hair2)" stroke-width="16"/>'+segs+'</svg>';
+  if(!es.length)return '<div class="donut"><div class="ring">'+ring+'<div class="ctr"><b>0</b><small>暂无</small></div></div></div>';
+  const legend=es.map((e,i)=>{
+    const col=(c&&c[e[0]])||pal[i%pal.length];
+    const pct=Math.round(e[1]/total*100);
+    return '<div class="li" style="--i:'+i+'"><i style="background:'+col+'"></i><span>'+esc(e[0])+'</span><em>'+e[1]+' · '+pct+'%</em></div>';
+  }).join('');
+  return '<div class="donut"><div class="ring">'+ring+'<div class="ctr"><b>'+total+'</b><small>总计</small></div></div><div class="lg">'+legend+'</div></div>';
 }
+// 短竖柱图：柱子从底部长出，不用横向长条
+function vbars(data,c){
+  const es=Object.keys(data||{}).filter(k=>data[k]>0).map(k=>[k,data[k]]);
+  if(!es.length)return '<div class="hint">暂无数据</div>';
+  const pal=['#e05263','#f08a3c','#3b9ae1','#9b6dd6','#2bb3a3','#8a6d3b','#7a5c9e','#4a7c7e'];
+  const max=Math.max.apply(null,es.map(e=>e[1]).concat([1]));
+  return '<div class="vbars">'+es.map((e,i)=>{
+    const col=(c&&c[e[0]])||pal[i%pal.length];
+    const h=Math.max(6,Math.round(e[1]/max*100));
+    return '<div class="vb"><span class="vnum">'+e[1]+'</span><div class="vtrack"><div class="vcol" style="--h:'+h+'%;--c:'+col+';--i:'+i+'"></div></div><span class="vlab">'+esc(e[0])+'</span></div>';
+  }).join('')+'</div>';
+}
+
+/* ---------- 我选的选项：按钮点选 ---------- */
+$('#ansPick').addEventListener('pointerdown',e=>{
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  b.classList.toggle('on');
+  $('#myAns').value=[...$('#ansPick').querySelectorAll('button.on')].map(x=>x.dataset.a).join('');
+});
 
 /* ---------- 设置 ---------- */
 function fillCfg(){
@@ -822,6 +1008,12 @@ $('#testCfg').addEventListener('click',async()=>{
   }catch(e){a.textContent='连接失败：'+e.message;status(false,e.message)}
 });
 function cfgAlert(m,ok){const a=$('#cfgAlert');a.hidden=false;a.className='alert'+(ok?' ok':'');a.textContent=m}
+$('#clearApi').addEventListener('click',()=>{
+  if(!confirm('确定清除 API 设置？\n\n只清空本机保存的 API Key 和接口地址，错题本不受影响。'))return;
+  localStorage.removeItem(CKEY);
+  cfg={key:'',base:'https://api.deepseek.com',model:'deepseek-flash'};
+  fillCfg();initStatus();cfgAlert('API 设置已清除，错题本保留',true);
+});
 
 function debounce(fn,ms){let t;return function(){clearTimeout(t);t=setTimeout(fn,ms)}}
 
